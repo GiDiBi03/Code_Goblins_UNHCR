@@ -1,0 +1,10 @@
+# Streamlit theme matching static/style.css (web_pages.html palette).
+# base = "light" forces the light theme even when Windows/macOS or the browser is in dark mode.
+# Streamlit reads this file from the folder you run `streamlit run` in; a copy lives in
+# code/.streamlit/ so the theme also applies when running from inside code/. Keep both in sync.
+[theme]
+base = "light"
+primaryColor = "#0072bc"
+backgroundColor = "#f9f9ff"
+secondaryBackgroundColor = "#F8FAFC"
+textColor = "#111c2d"

@@ -246,3 +246,37 @@ html, body, .stApp, [data-testid="stAppViewContainer"] {
 .cx-ring .in b { font-size: 15px; }
 .cx-info-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); }
 .cx-info p.big { white-space: nowrap; font-size: 18px; }
+
+/* ---------- light-mode guard ----------
+   The real fix is .streamlit/config.toml (base = "light"). If Streamlit starts without it
+   (wrong working folder, or the hidden .streamlit folder was not copied) and the OS/browser
+   is in dark mode, Streamlit paints widgets dark. These rules keep the app light anyway.
+   Tables drawn by st.dataframe use a canvas and can only be fixed through config.toml. */
+:root, html, body, .stApp { color-scheme: light; }
+.stApp, [data-testid="stSidebar"], [data-testid="stMarkdownContainer"], [data-testid="stWidgetLabel"], [data-testid="stCaptionContainer"] { color: var(--on-surface); }
+.stApp input, .stApp textarea,
+.stApp [data-testid="stTextInputRootElement"], .stApp [data-testid="stTextAreaRootElement"],
+.stApp .react-aria-ComboBox [role="group"], .stApp [data-baseweb="select"] > div,
+.stApp [data-baseweb="input"], .stApp [data-baseweb="textarea"], .stApp [data-baseweb="base-input"] {
+  background: var(--surface-lowest) !important; color: var(--on-surface) !important; -webkit-text-fill-color: var(--on-surface);
+}
+.stApp [data-testid="stTextAreaRootElement"], .stApp [data-baseweb="textarea"] { border: 1px solid var(--border) !important; border-radius: .25rem !important; }
+.stApp input::placeholder, .stApp textarea::placeholder { color: var(--outline-variant) !important; -webkit-text-fill-color: var(--outline-variant); }
+[role="listbox"], [role="option"], [data-baseweb="popover"] > div, [data-baseweb="menu"] {
+  background: var(--surface-lowest) !important; color: var(--on-surface) !important;
+}
+[role="option"]:hover, [role="option"][data-focused="true"] { background: var(--surface-low) !important; }
+.stApp [data-testid="stBaseButton-secondary"], .stApp [data-testid="stDownloadButton"] button {
+  background: var(--surface-lowest); color: var(--on-surface); border: 1px solid var(--border);
+}
+.stApp [data-testid="stExpander"] details, .stApp [data-testid="stExpander"] summary { background: var(--surface-lowest) !important; color: var(--on-surface); }
+[data-testid="stDialog"] [role="dialog"] { background: var(--surface-lowest) !important; color: var(--on-surface); }
+.stApp [data-testid="stDataFrame"] { background: var(--surface-lowest); }
+.stApp [data-testid="stAlert"] { color: var(--on-surface); }
+[data-testid="stSlider"] [role="slider"] { background: var(--primary-container) !important; }
+[data-testid="stSlider"] [data-testid="stSliderThumbValue"] { color: var(--primary-container) !important; }
+.cx-kpi.mod b { color: var(--red) !important; }
+.cx-pill.alta, .cx-badge.alta, .badge-red { color: #fff !important; }
+.st-key-btn_confirmar button *, .st-key-btn_confirmar_mod button * { color: #fff !important; }
+.st-key-btn_modificar button * { color: var(--red) !important; }
+[data-testid="stToast"] * { color: var(--inverse-on-surface) !important; }
