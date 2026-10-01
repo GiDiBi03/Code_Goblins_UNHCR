@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en" style="min-height: 100%; position: relative; opacity: 0;" data-stitch-anim-opacity="true">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="web_dashboard" name="shell-type">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300..900;1,300..900&amp;family=Work+Sans:ital,wght@0,100..900;1,100..900&amp;display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <style>
+        @layer base {
+
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                overscroll-behavior: none;
+            }
+
+            main>:first-child {
+                margin-top: 0 !important;
+            }
+
+            main>:last-child {
+                margin-bottom: 0 !important;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script
+        id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "on-primary": "#ffffff", "surface-dim": "#cfdaf2", "text-slate-muted": "#334155", "inverse-surface": "#263143", "inverse-on-surface": "#ecf1ff", "on-tertiary": "#ffffff", "surface-bright": "#f9f9ff", "surface-tint": "#0062a2", "error": "#ba1a1a", "on-tertiary-fixed-variant": "#5a4300", "on-secondary-fixed-variant": "#274969", "surface-container-lowest": "#ffffff", "on-surface": "#111c2d", "on-primary-fixed-variant": "#00497c", "surface": "#f9f9ff", "tertiary-container": "#8b6900", "surface-container-low": "#f0f3ff", "on-primary-fixed": "#001d35", "primary-fixed-dim": "#9dcaff", "inverse-primary": "#9dcaff", "secondary-container": "#b6d8fe", "secondary-fixed": "#cfe5ff", "primary": "#005994", "surface-variant": "#d8e3fb", "outline": "#717882", "tertiary-fixed-dim": "#f6bf22", "on-background": "#111c2d", "tertiary": "#6d5200", "pure-white": "#FFFFFF", "tertiary-fixed": "#ffdf99", "border-subtle": "#E2E8F0", "accent-gold-deep": "#F8B32B", "outline-variant": "#c0c7d3", "on-surface-variant": "#404751", "error-container": "#ffdad6", "on-error-container": "#93000a", "on-error": "#ffffff", "emergency-red": "#D9381E", "secondary": "#406182", "surface-container": "#e7eeff", "surface-container-high": "#dee8ff", "on-tertiary-fixed": "#251a00", "on-secondary": "#ffffff", "on-secondary-fixed": "#001d34", "secondary-fixed-dim": "#a8caef", "on-primary-container": "#ecf3ff", "surface-subtle": "#F8FAFC", "primary-container": "#0072bc", "background": "#f9f9ff", "on-secondary-container": "#3d5e7f", "surface-container-highest": "#d8e3fb", "primary-fixed": "#d1e4ff", "on-tertiary-container": "#fff0d7" }, borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, spacing: { "space-xs": "0.25rem", "gutter": "1.5rem", "space-xl": "2.5rem", "space-sm": "0.5rem", "gutter-mobile": "1rem", "margin": "2rem", "margin-desktop": "3rem", "space-lg": "1.5rem", "margin-mobile": "1rem", "space-md": "1rem" }, fontFamily: { "headline-md": ["Work Sans"], "title-md": ["Work Sans"], "headline-lg-mobile": ["Work Sans"], "body-md": ["\"Source Sans 3\""], "headline-sm": ["Work Sans"], "label-md": ["Work Sans"], "body-lg": ["\"Source Sans 3\""], "body-sm": ["\"Source Sans 3\""], "label-caps": ["Work Sans"], "label-lg": ["Work Sans"], "headline-lg": ["Work Sans"], "display-hero-mobile": ["Work Sans"], "display-hero": ["Work Sans"] }, fontSize: { "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }], "title-md": ["18px", { "lineHeight": "26px", "fontWeight": "500" }], "headline-lg-mobile": ["26px", { "lineHeight": "34px", "fontWeight": "600" }], "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }], "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }], "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "600" }], "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }], "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.08em", "fontWeight": "700" }], "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600" }], "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "display-hero-mobile": ["34px", { "lineHeight": "42px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "display-hero": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }] } } } }</script>
+</head>
+
+<body class="bg-surface font-body-md text-on-surface antialiased min-h-screen">
+    <header
+        class="fixed top-0 left-0 right-0 h-16 bg-surface-container-lowest border-b border-border-subtle z-50 px-gutter">
+        <div class="h-16 w-full flex items-center justify-between gap-space-md">
+            <div class="flex items-center gap-space-lg">
+                <div class="flex items-center gap-space-sm"><img alt="UNHCR Logo" class="h-8 w-auto object-contain"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMFfRhZ87-xY7UDZZP-CHBrYe8dirs_kvyXSI0Dvq9zIj814QrxGrMES8Ho_ZRdrkC9svekOlytupfs47ZfQwMJGTjQixynJnMAqNcS93RMJZOPELdmwf74XteS__9K-BJYYDXkbFbn1nh8-zYppKLZ8SUbFJ23MchLc2ePDVmcTKHVccPPS-JiN4CdQk8sKiiCZRdPmICxF8CtmLDYd_LPapjRaTFPXL7fpLpVzftgl2NTgjp71g">
+                    <div class="flex flex-col"><span
+                            class="font-label-caps text-label-caps text-primary uppercase">UNHCR Protection</span><span
+                            class="font-headline-sm text-headline-sm text-on-surface leading-none">Triage OS</span>
+                    </div>
+                </div>
+                <div class="h-4 w-[1px] bg-border-subtle hidden md:block"></div><span
+                    class="hidden md:inline-block font-label-md text-label-md text-text-slate-muted">Anonymous Case
+                    Review</span>
+            </div>
+            <div class="flex items-center gap-space-md">
+                <div class="flex items-center gap-space-xs px-space-sm py-1 bg-surface-container rounded"></div>
+                <div class="flex items-center gap-space-sm pl-space-sm border-l border-border-subtle">
+                    <div class="relative"><img alt="Profile" class="w-8 h-8 rounded-full object-cover"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXgd7cxTFZUA8HtFkvs7bQt1aaMkTM45hiSWTC7vCO1HceCr3D_oQzF3fF-O1w8uHJRzRp5cGYyG2tG7o3XS-MgB4Te2O7zjK6HOlxaWrXdDxaF3-NKjLVIlQr85PsiwQYq_VybyZIn7_dtRNkgdawBUXcTnSnV8k0jbXZyk7eQf1yZYPjSjbC_WuOqtJniayoGgv8FdeeqcV0FB92tUIl3326esQqZNQfhR5ZYBCUduBj1Zq-2X4"><span
+                            class="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-primary-container ring-2 ring-pure-white"></span>
+                    </div><span
+                        class="hidden sm:inline font-label-md text-label-md text-on-surface font-semibold">Officer
+                        Station 04</span>
+                </div>
+            </div>
+        </div>
+    </header>
+    <aside
+        class="fixed left-0 top-16 bottom-0 w-64 bg-surface-subtle border-r border-border-subtle z-40 flex flex-col justify-between py-space-md">
+        <div class="flex flex-col gap-space-md">
+            <div class="px-space-md"><span
+                    class="font-label-caps text-label-caps text-text-slate-muted uppercase">Operational
+                    Navigation</span></div>
+            <nav class="flex flex-col gap-1 px-space-sm"
+                data-active-classes="bg-primary-container text-on-primary font-semibold"><a
+                    class="flex items-center justify-between px-space-md py-space-sm rounded font-label-lg text-label-lg hover:text-on-surface transition-all bg-primary-container text-on-primary font-semibold"
+                    data-path="dashboard" href="#">
+                    <div class="flex items-center gap-space-sm"><span
+                            class="material-symbols-outlined text-[18px]">dashboard</span><span
+                            class="">Dashboard</span></div>
+                </a><a
+                    class="flex items-center justify-between px-space-md py-space-sm rounded font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all"
+                    data-path="triage-queue" href="#">
+                    <div class="flex items-center gap-space-sm"><span
+                            class="material-symbols-outlined text-[18px]">inbox</span><span class="">Triage Queue</span>
+                    </div><span
+                        class="px-1.5 py-0.5 rounded font-label-caps text-label-caps bg-emergency-red text-pure-white">18</span>
+                </a><a
+                    class="flex items-center justify-between px-space-md py-space-sm rounded font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all"
+                    data-path="reviewed-cases" href="#">
+                    <div class="flex items-center gap-space-sm"><span
+                            class="material-symbols-outlined text-[18px]">check_circle</span><span class="">Reviewed
+                            Cases</span></div><span
+                        class="px-1.5 py-0.5 rounded font-label-caps text-label-caps bg-surface-container text-text-slate-muted">124</span>
+                </a></nav>
+        </div>
+    </aside>
+    <div class="pl-64 min-h-screen">
+        <main class="relative pt-16 bg-surface min-h-screen w-full px-gutter">
+            <div class="flex flex-col w-full py-space-md">
+                <div class="flex flex-col gap-space-md mb-space-lg">
+                    <div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md">
+                        <div class="flex flex-col gap-space-xs">
+                            <div class="flex items-center gap-space-xs">
+                                <span
+                                    class="inline-flex items-center gap-1 px-2 py-0.5 rounded font-label-caps text-label-caps bg-surface-container text-primary font-bold tracking-wider uppercase">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                                    Operational Synthesis
+                                </span>
+                                <span class="font-label-caps text-label-caps text-text-slate-muted uppercase">Jordan
+                                    Country Field Office</span>
+                            </div>
+                            <h1 class="font-headline-lg text-headline-lg text-on-surface">Operations &amp; Triage
+                                Analytics</h1>
+                            <p class="font-body-md text-body-md text-text-slate-muted max-w-2xl">
+                                Aggregated protection metrics and case determinations for 124 reviewed dossiers.
+                                Enforcing strict non-refoulement and identity de-identification protocols.
+                            </p>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-space-sm">
+                            <div class="flex items-center bg-surface-container-lowest rounded-lg p-1 shadow-sm">
+                                <button
+                                    class="status-tab-btn px-3 py-1.5 rounded font-label-md text-label-md bg-primary text-on-primary font-semibold transition-all"
+                                    id="btn-filter-all" onclick="filterCases('all')">All Reviewed (124)</button>
+                                <button
+                                    class="status-tab-btn px-3 py-1.5 rounded font-label-md text-label-md text-text-slate-muted hover:text-on-surface transition-all"
+                                    id="btn-filter-approved" onclick="filterCases('APPROVED')">Approved (86)</button>
+                                <button
+                                    class="status-tab-btn px-3 py-1.5 rounded font-label-md text-label-md text-text-slate-muted hover:text-on-surface transition-all"
+                                    id="btn-filter-denied" onclick="filterCases('DENIED')">Denied (38)</button>
+                            </div>
+
+                            <button
+                                class="flex items-center gap-space-xs px-3.5 py-2 rounded-lg bg-surface-container text-primary font-label-md text-label-md hover:bg-secondary-container transition-colors shadow-sm"
+                                onclick="downloadCSVReport()">
+                                <span class="material-symbols-outlined text-[18px]">download</span>
+                                <span class="">Export CSV</span>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Quick Stat Pulse Strip -->
+                    <div class="grid gap-space-md grid-cols-1 md:grid-cols-3">
+                        <div
+                            class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between">
+                            <div class="flex items-center justify-between">
+                                <span class="font-label-caps text-label-caps text-text-slate-muted uppercase">Total
+                                    Adjudications</span>
+                                <span class="material-symbols-outlined text-primary text-[20px]">fact_check</span>
+                            </div>
+                            <div class="flex items-baseline gap-space-xs mt-space-sm">
+                                <span class="font-display-hero text-headline-lg text-on-surface">124</span>
+                                <span class="font-label-caps text-label-caps text-primary uppercase font-bold">100%
+                                    Target Met</span>
+                            </div>
+                            <div class="w-full bg-surface-container h-1 rounded-full mt-2 overflow-hidden">
+                                <div class="bg-primary h-full rounded-full" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        <div
+                            class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between">
+                            <div class="flex items-center justify-between">
+                                <span class="font-label-caps text-label-caps text-text-slate-muted uppercase">Expedited
+                                    Approvals</span>
+                                <span class="material-symbols-outlined text-primary text-[20px]">verified_user</span>
+                            </div>
+                            <div class="flex items-baseline gap-space-xs mt-space-sm">
+                                <span class="font-display-hero text-headline-lg text-primary">69.4%</span>
+                                <span class="font-body-sm text-body-sm text-text-slate-muted">(86 files)</span>
+                            </div>
+                            <div class="w-full bg-surface-container h-1 rounded-full mt-2 overflow-hidden">
+                                <div class="bg-primary-container h-full rounded-full" style="width: 69.4%"></div>
+                            </div>
+                        </div>
+                        <div
+                            class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between">
+                            <div class="flex items-center justify-between">
+                                <span class="font-label-caps text-label-caps text-text-slate-muted uppercase">Biometric
+                                    Hold / Denied</span>
+                                <span
+                                    class="material-symbols-outlined text-emergency-red text-[20px]">assignment_late</span>
+                            </div>
+                            <div class="flex items-baseline gap-space-xs mt-space-sm">
+                                <span class="font-display-hero text-headline-lg text-emergency-red">30.6%</span>
+                                <span class="font-body-sm text-body-sm text-text-slate-muted">(38 files)</span>
+                            </div>
+                            <div class="w-full bg-surface-container h-1 rounded-full mt-2 overflow-hidden">
+                                <div class="bg-emergency-red h-full rounded-full" style="width: 30.6%"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- Demographics & Vulnerability Analytics Matrix (4 Core Cards) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-md mb-space-lg">
+                    <!-- CARD 1: Head of Household Distribution -->
+                    <div
+                        class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-space-xs">
+                                <span
+                                    class="font-label-caps text-label-caps text-text-slate-muted uppercase tracking-wider">Demographic
+                                    Profile</span>
+                                <span class="material-symbols-outlined text-[18px] text-primary">diversity_1</span>
+                            </div>
+                            <h3 class="font-headline-sm text-headline-sm text-on-surface">Head of Household</h3>
+                            <p class="font-body-sm text-body-sm text-text-slate-muted mt-0.5">High prevalence of single
+                                female providers amidst border transfers.</p>
+                        </div>
+                        <div class="my-space-md flex flex-col items-center">
+                            <!-- Donut SVG Diagram -->
+                            <div class="relative w-36 h-36 flex items-center justify-center">
+                                <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                                    <!-- Background Ring -->
+                                    <circle class="text-surface-container" cx="18" cy="18" fill="none" r="14"
+                                        stroke="currentColor" stroke-width="4.5"></circle>
+                                    <!-- Female-Headed: 58% -> stroke-dasharray="51 100", offset 0 -->
+                                    <circle cx="18" cy="18" fill="none" r="14" stroke="#0072bc"
+                                        stroke-dasharray="51 100" stroke-linecap="round" stroke-width="4.5"></circle>
+                                    <!-- Male-Headed: 31% -> stroke-dasharray="27.3 100", offset -51 -->
+                                    <circle cx="18" cy="18" fill="none" r="14" stroke="#406182"
+                                        stroke-dasharray="27.3 100" stroke-dashoffset="-51" stroke-width="4.5"></circle>
+                                    <!-- Single / Blank: 11% -> stroke-dasharray="9.7 100", offset -78.3 -->
+                                    <circle cx="18" cy="18" fill="none" r="14" stroke="#cfdaf2"
+                                        stroke-dasharray="9.7 100" stroke-dashoffset="-78.3" stroke-width="4.5">
+                                    </circle>
+                                </svg>
+                                <div class="absolute flex flex-col items-center justify-center text-center">
+                                    <span
+                                        class="font-headline-md text-headline-md text-on-surface leading-tight font-bold">58%</span>
+                                    <span class="font-label-caps text-[9px] text-text-slate-muted uppercase">Female
+                                        Lead</span>
+                                </div>
+                            </div>
+                            <!-- Legend -->
+                            <div class="w-full flex flex-col gap-1.5 mt-space-sm">
+                                <div class="flex items-center justify-between text-body-sm font-body-sm">
+                                    <span class="flex items-center gap-2">
+                                        <span class="w-2.5 h-2.5 rounded-full bg-primary-container"></span>
+                                        <span class="text-on-surface font-medium">Female-Headed</span>
+                                    </span>
+                                    <span class="font-semibold text-on-surface">58% <span
+                                            class="text-text-slate-muted font-normal text-xs">(72)</span></span>
+                                </div>
+                                <div class="flex items-center justify-between text-body-sm font-body-sm">
+                                    <span class="flex items-center gap-2">
+                                        <span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+                                        <span class="text-on-surface font-medium">Male-Headed</span>
+                                    </span>
+                                    <span class="font-semibold text-on-surface">31% <span
+                                            class="text-text-slate-muted font-normal text-xs">(38)</span></span>
+                                </div>
+                                <div class="flex items-center justify-between text-body-sm font-body-sm">
+                                    <span class="flex items-center gap-2">
+                                        <span class="w-2.5 h-2.5 rounded-full bg-surface-dim"></span>
+                                        <span class="text-on-surface font-medium">Single Individual / Unspecified</span>
+                                    </span>
+                                    <span class="font-semibold text-on-surface">11% <span
+                                            class="text-text-slate-muted font-normal text-xs">(14)</span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="bg-surface-container-low p-2 rounded text-text-slate-muted font-body-sm text-[12px] leading-relaxed">
+                            <strong>Vulnerability Note:</strong> Female-headed units receive expedited childcare-subsidy
+                            checks under Standard 4-A.
+                        </div>
+                    </div>
+                    <!-- CARD 2: Household Size Breakdown (1 to 11 members) -->
+                    <div
+                        class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-space-xs">
+                                <span
+                                    class="font-label-caps text-label-caps text-text-slate-muted uppercase tracking-wider">Family
+                                    Units</span>
+                                <span class="material-symbols-outlined text-[18px] text-primary">groups</span>
+                            </div>
+                            <div class="flex items-baseline justify-between">
+                                <h3 class="font-headline-sm text-headline-sm text-on-surface">Household Size</h3>
+                                <span
+                                    class="px-2 py-0.5 rounded font-label-caps text-label-caps bg-secondary-fixed text-on-secondary-fixed">Median:
+                                    4 Persons</span>
+                            </div>
+                            <p class="font-body-sm text-body-sm text-text-slate-muted mt-0.5">Distribution spectrum from
+                                single individuals to extended kin (1–11 members).</p>
+                        </div>
+                        <!-- Histogram / Vertical distribution chart -->
+                        <div class="my-space-md flex flex-col gap-2">
+                            <div class="flex items-end justify-between gap-1.5 h-28 pt-2 px-1">
+                                <!-- 1 Person -->
+                                <div class="flex-1 flex flex-col items-center h-full justify-end group">
+                                    <span
+                                        class="font-label-caps text-[10px] text-text-slate-muted mb-1 opacity-0 group-hover:opacity-100 transition-opacity">14</span>
+                                    <div class="w-full bg-surface-container-high hover:bg-primary-container rounded-t transition-all"
+                                        style="height: 30%"></div>
+                                    <span class="font-label-caps text-[10px] text-text-slate-muted mt-1.5">1</span>
+                                </div>
+                                <!-- 2-3 Persons -->
+                                <div class="flex-1 flex flex-col items-center h-full justify-end group">
+                                    <span
+                                        class="font-label-caps text-[10px] text-text-slate-muted mb-1 opacity-0 group-hover:opacity-100 transition-opacity">28</span>
+                                    <div class="w-full bg-secondary hover:bg-primary-container rounded-t transition-all"
+                                        style="height: 60%"></div>
+                                    <span class="font-label-caps text-[10px] text-text-slate-muted mt-1.5">2-3</span>
+                                </div>
+                                <!-- 4-5 Persons (Peak) -->
+                                <div class="flex-1 flex flex-col items-center h-full justify-end group">
+                                    <span
+                                        class="font-label-caps text-[10px] text-primary font-bold mb-1 opacity-100">46</span>
+                                    <div class="w-full bg-primary rounded-t shadow-sm" style="height: 100%"></div>
+                                    <span class="font-label-caps text-[10px] text-primary font-bold mt-1.5">4-5</span>
+                                </div>
+                                <!-- 6-7 Persons -->
+                                <div class="flex-1 flex flex-col items-center h-full justify-end group">
+                                    <span
+                                        class="font-label-caps text-[10px] text-text-slate-muted mb-1 opacity-0 group-hover:opacity-100 transition-opacity">22</span>
+                                    <div class="w-full bg-secondary hover:bg-primary-container rounded-t transition-all"
+                                        style="height: 48%"></div>
+                                    <span class="font-label-caps text-[10px] text-text-slate-muted mt-1.5">6-7</span>
+                                </div>
+                                <!-- 8-9 Persons -->
+                                <div class="flex-1 flex flex-col items-center h-full justify-end group">
+                                    <span
+                                        class="font-label-caps text-[10px] text-text-slate-muted mb-1 opacity-0 group-hover:opacity-100 transition-opacity">10</span>
+                                    <div class="w-full bg-surface-container-highest hover:bg-primary-container rounded-t transition-all"
+                                        style="height: 22%"></div>
+                                    <span class="font-label-caps text-[10px] text-text-slate-muted mt-1.5">8-9</span>
+                                </div>
+                                <!-- 10-11 Persons -->
+                                <div class="flex-1 flex flex-col items-center h-full justify-end group">
+                                    <span
+                                        class="font-label-caps text-[10px] text-text-slate-muted mb-1 opacity-0 group-hover:opacity-100 transition-opacity">4</span>
+                                    <div class="w-full bg-surface-dim hover:bg-primary-container rounded-t transition-all"
+                                        style="height: 9%"></div>
+                                    <span class="font-label-caps text-[10px] text-text-slate-muted mt-1.5">10-11</span>
+                                </div>
+                            </div>
+                            <div
+                                class="flex justify-between items-center px-1 font-label-caps text-label-caps text-text-slate-muted">
+                                <span class="">Number of Registered Dependents</span>
+                                <span class="font-semibold text-primary">37% Cluster (4-5)</span>
+                            </div>
+                        </div>
+                        <div
+                            class="bg-surface-container-low p-2 rounded text-text-slate-muted font-body-sm text-[12px] leading-relaxed">
+                            <strong>Shelter Allocation:</strong> 36 households with &gt;6 persons trigger joint-tent
+                            emergency prepositioning.
+                        </div>
+                    </div>
+                    <!-- CARD 3: Sole Carer Status -->
+                    <div
+                        class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-space-xs">
+                                <span
+                                    class="font-label-caps text-label-caps text-text-slate-muted uppercase tracking-wider">Protection
+                                    Urgency</span>
+                                <span
+                                    class="material-symbols-outlined text-[18px] text-accent-gold-deep">escalator_warning</span>
+                            </div>
+                            <h3 class="font-headline-sm text-headline-sm text-on-surface">Sole Carer Status</h3>
+                            <p class="font-body-sm text-body-sm text-text-slate-muted mt-0.5">Critical risk criteria
+                                determining immediate cash assistance grants.</p>
+                        </div>
+                        <div class="my-space-md flex flex-col gap-space-sm">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-primary text-[20px]">person_alert</span>
+                                    <div>
+                                        <div
+                                            class="font-title-md text-title-md text-on-surface leading-tight font-semibold">
+                                            42% (52 Units)</div>
+                                        <span class="font-body-sm text-body-sm text-text-slate-muted">Sole Adult
+                                            Caregiver</span>
+                                    </div>
+                                </div>
+                                <span
+                                    class="px-2 py-0.5 rounded font-label-caps text-label-caps bg-emergency-red text-on-primary">Priority
+                                    1</span>
+                            </div>
+                            <!-- Progress Track -->
+                            <div class="w-full bg-surface-container h-2.5 rounded-full overflow-hidden flex">
+                                <div class="bg-primary-container h-full" style="width: 42%" title="Sole Carer: 42%">
+                                </div>
+                                <div class="bg-secondary h-full" style="width: 47%" title="Dual Adult Care: 47%"></div>
+                                <div class="bg-surface-dim h-full" style="width: 11%" title="Independent: 11%"></div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 pt-1 font-body-sm text-body-sm">
+                                <div class="flex flex-col bg-surface-container-low p-2 rounded">
+                                    <span class="font-label-caps text-[10px] text-text-slate-muted uppercase">Dual Adult
+                                        Care</span>
+                                    <span class="font-semibold text-on-surface">47% <span
+                                            class="font-normal text-text-slate-muted">(58)</span></span>
+                                </div>
+                                <div class="flex flex-col bg-surface-container-low p-2 rounded">
+                                    <span class="font-label-caps text-[10px] text-text-slate-muted uppercase">Single
+                                        Non-Dep</span>
+                                    <span class="font-semibold text-on-surface">11% <span
+                                            class="font-normal text-text-slate-muted">(14)</span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="bg-surface-container-low p-2 rounded text-text-slate-muted font-body-sm text-[12px] leading-relaxed">
+                            <strong>Direct Mandate:</strong> 52 sole carers verified for automated referral to Family
+                            Protection Unit (FPU).
+                        </div>
+                    </div>
+                    <!-- CARD 4: Adult Literacy Profile -->
+                    <div
+                        class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-space-xs">
+                                <span
+                                    class="font-label-caps text-label-caps text-text-slate-muted uppercase tracking-wider">Procedural
+                                    Safeguard</span>
+                                <span
+                                    class="material-symbols-outlined text-[18px] text-primary">record_voice_over</span>
+                            </div>
+                            <h3 class="font-headline-sm text-headline-sm text-on-surface">Adult Literacy Profile</h3>
+                            <p class="font-body-sm text-body-sm text-text-slate-muted mt-0.5">Determines requirements
+                                for audio/oral informed consent recordings.</p>
+                        </div>
+                        <div class="my-space-md flex flex-col gap-space-sm">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <div
+                                        class="font-headline-md text-headline-md text-on-surface leading-tight font-bold">
+                                        64%</div>
+                                    <span class="font-label-caps text-[10px] text-text-slate-muted uppercase">Fully
+                                        Literate (Both/Single)</span>
+                                </div>
+                                <div class="text-right">
+                                    <div
+                                        class="font-headline-md text-headline-md text-accent-gold-deep leading-tight font-bold">
+                                        36%</div>
+                                    <span class="font-label-caps text-[10px] text-text-slate-muted uppercase">1+
+                                        Illiterate Adults</span>
+                                </div>
+                            </div>
+                            <!-- Comparative segmented bar -->
+                            <div class="w-full flex flex-col gap-1">
+                                <div class="h-3 w-full bg-surface-container rounded-full overflow-hidden flex">
+                                    <div class="bg-primary h-full" style="width: 64%"></div>
+                                    <div class="bg-accent-gold-deep h-full" style="width: 36%"></div>
+                                </div>
+                                <div
+                                    class="flex justify-between font-label-caps text-[10px] text-text-slate-muted px-1">
+                                    <span class="">79 Units (Standard Written)</span>
+                                    <span class="">45 Units (Oral Protocol)</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-space-xs bg-surface-container-low px-2 py-1.5 rounded">
+                                <span class="material-symbols-outlined text-primary text-[18px]">verified</span>
+                                <span class="font-body-sm text-[12px] text-on-surface font-medium">Biometric Audio
+                                    Fingerprint Enforced</span>
+                            </div>
+                        </div>
+                        <div
+                            class="bg-surface-container-low p-2 rounded text-text-slate-muted font-body-sm text-[12px] leading-relaxed">
+                            <strong>Oral Protocol:</strong> 45 cases completed with mandatory recorded verbal assent in
+                            Kurdish / Levantine Arabic.
+                        </div>
+                    </div>
+                </div>
+                <!-- Reviewed Cases Log Table Module -->
+                <div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col">
+                    <!-- Log Header & Query Bar -->
+                    <div
+                        class="p-space-md bg-surface-container-low flex flex-col md:flex-row items-stretch md:items-center justify-between gap-space-md">
+                        <div class="flex items-center gap-space-sm">
+                            <div
+                                class="w-9 h-9 rounded-lg bg-surface-container-lowest flex items-center justify-center text-primary shadow-sm">
+                                <span class="material-symbols-outlined text-[20px]">dataset</span>
+                            </div>
+                            <div>
+                                <h2 class="font-headline-sm text-headline-sm text-on-surface">Reviewed Cases Ledger</h2>
+                                <span
+                                    class="font-label-caps text-label-caps text-text-slate-muted uppercase">Cryptographic
+                                    Audit Stamp Active • Jordan Azraq Manifest</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-space-sm">
+                            <!-- Live Search Input -->
+                            <div class="relative flex-1 md:w-64">
+                                <span
+                                    class="material-symbols-outlined absolute left-3 top-2.5 text-[18px] text-text-slate-muted">search</span>
+                                <input
+                                    class="w-full bg-surface-container-lowest pl-9 pr-3 py-2 rounded-lg text-body-sm font-body-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary shadow-sm"
+                                    id="case-search-input" onkeyup="searchCasesTable()"
+                                    placeholder="Search Case ID or keyword..." type="text">
+                            </div>
+                            <!-- Filter Pill Selectors -->
+                            <div class="flex items-center gap-1 bg-surface-container-lowest p-1 rounded-lg shadow-sm">
+                                <button
+                                    class="priority-pill px-2.5 py-1 rounded font-label-caps text-label-caps bg-surface-container text-primary font-bold"
+                                    onclick="filterByPriority('all')">ALL</button>
+                                <button
+                                    class="priority-pill px-2.5 py-1 rounded font-label-caps text-label-caps text-text-slate-muted hover:text-on-surface font-semibold"
+                                    onclick="filterByPriority('sole')">SOLE CARER</button>
+                                <button
+                                    class="priority-pill px-2.5 py-1 rounded font-label-caps text-label-caps text-text-slate-muted hover:text-on-surface font-semibold"
+                                    onclick="filterByPriority('illiterate')">ORAL CONSENT</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Data Table Container -->
+                    <div class="overflow-x-auto w-full">
+                        <table class="w-full text-left" id="dossier-table">
+                            <thead
+                                class="bg-surface-container text-on-surface-variant font-label-caps text-label-caps uppercase">
+                                <tr>
+                                    <th class="py-3 px-space-md">Case ID</th>
+                                    <th class="py-3 px-space-sm">Adjudicated</th>
+                                    <th class="py-3 px-space-sm">HH Size</th>
+                                    <th class="py-3 px-space-sm">Head of Unit</th>
+                                    <th class="py-3 px-space-sm">Carer Status</th>
+                                    <th class="py-3 px-space-sm">Literacy</th>
+                                    <th class="py-3 px-space-sm">Triage Determination</th>
+                                    <th class="py-3 px-space-md w-1/3">Officer Findings &amp; Rationale</th>
+                                    <th class="py-3 px-space-md text-right">Dossier</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-border-subtle font-body-sm text-body-sm text-on-surface"
+                                id="table-body">
+                                <!-- Row 1: Approved Sole Carer -->
+                                <tr class="hover:bg-surface-container-low transition-colors case-row"
+                                    data-literacy="illiterate" data-sole="yes" data-status="APPROVED">
+                                    <td class="py-3.5 px-space-md font-medium text-primary">
+                                        <div class="flex items-center gap-1.5">
+                                            <span
+                                                class="material-symbols-outlined text-[16px] text-primary">badge</span>
+                                            <span
+                                                class="font-headline-sm text-title-md font-semibold text-primary">#JOR-88419</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-3.5 px-space-sm text-text-slate-muted whitespace-nowrap">24 Oct 2024
+                                    </td>
+                                    <td class="py-3.5 px-space-sm">
+                                        <span
+                                            class="inline-flex items-center px-2 py-0.5 rounded font-label-caps text-label-caps bg-surface-container font-semibold text-on-surface">4
+                                            Members</span>
+                                    </td>
+                                    <td class="py-3.5 px-space-sm">
+                                        <div class="flex items-center gap-1 font-medium">
+                                            <span
+                                                class="material-symbols-outlined text-[16px] text-primary">female</span>
+                                            <span class="">Female</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-3.5 px-space-sm">
+                                        <span
+                                            class="inline-flex items-center gap-1 px-2 py-0.5 rounded font-label-caps text-label-caps bg-emergency-red text-on-primary font-bold">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-pure-white"></span>
+                                            Sole Carer
+                                        </span>
+                                    </td>
+                                    <td class="py-3.5 px-space-sm">
+                                        <span
+                                            class="inline-flex items-center gap-1 text-[12px] font-semibold text-accent-gold-deep">
+                                            <span class="material-symbols-outlined text-[14px]">volume_up</span>
+                                            1+ Illiterate
+                                        </span>
+                                    </td>
+                                    <td class="py-3.5 px-space-sm">
+                                        <span
+                                            class="inline-flex items-center gap-1 px-2.5 py-1 rounded font-label-caps text-label-caps bg-primary text-on-primary font-bold tracking-wider">
+                                            <span class="material-symbols-outlined text-[14px]">check_circle</span>
+                                            APPROVED
+                                        </span>
+                                    </td>
+                                    <td class="py-3.5 px-space-md">
+                                        <p class="text-text-slate-muted line-clamp-2 leading-relaxed">
+                                            Single female guardian with 3 minors under 6. Emergency protection
+                                            accommodation grant cleared; biometric waiver granted for child trauma.
+                                            Audio assent recorded.
+                                        </p>
+                                    </td>
+                                    <td class="py-3.5 px-space-md text-right whitespace-nowrap">
+                                        <button
+                                            class="px-3 py-1 rounded bg-surface-container hover:bg-primary hover:text-on-primary font-label-md text-label-md text-primary transition-all"
+                                            onclick="openModal('#JOR-88419', 'APPROVED', 'Single female guardian with 3 minors under 6. Emergency protection accommodation grant cleared; biometric waiver granted for child trauma. Audio assent recorded.', 'Female', '4 Members', 'Sole Carer', '1+ Illiterate')">
+                                            Review →
+                                        </button>
+                                    </td>
+                                </tr>
+                                <!-- Row 2: Denied Biometric Hold -->
+                                <tr class="hover:bg-surface-container-low transition-colors case-row"
+                                    data-literacy="literate" data-sole="no" data-status="DENIED">
+                                    <td class="py-3.5 px-space-md font-medium text-primary">
+                                        <div class="flex items-center gap-1.5">
+                                            <span
+                                                class="material-symbols-outlined text-[16px] text-text-slate-muted">badge</span>
+                                            <span
+                                                class="font-headline-sm text-title-md font-semibold text-on-surface">#JOR-88415</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-3.5 px-space-sm text-text-slate-muted whitespace-nowrap">24 Oct 2024
+                                    </td>
+                                    <td class="py-3.5 px-space-sm">
+                                        <span
+                                            class="inline-flex items-center px-2 py-0.5 rounded font-label-caps text-label-caps bg-surface-container font-semibold text-on-surface">1
+                                            Member</span>
+                                    </td>
+                                    <td class="py-3.5 px-space-sm">
+                                        <div class="flex items-center gap-1 font-medium">
+                                            <span
+                                                class="material-symbols-outlined text-[16px] text-secondary">male</span>
+                                            <span class="">Male</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-3.5 px-space-sm">
+                                        <span
+                                            class="inline-flex items-center px-2 py-0.5 rounded font-label-caps text-label-caps bg-surface-container-high text-text-slate-muted">
+                                            Independent
+                                        </span>
+                                    </td>
+                                    <td class="py-3.5 px-space-sm">
+                                        <span class="text-[12px] text-text-slate-muted">Literate</span>
+                                    </td>
+                                    <td class="py-3.5 px-space-sm">
+                                        <span
+                                            class="inline-flex items-center gap-1 px-2.5 py-1 rounded font-label-caps text-label-caps bg-surface-container text-emergency-red font-bold tracking-wider">
+                                            <span class="material-symbols-outlined text-[14px]">cancel</span>
+                                            DENIED / RE-INTAKE
+                                        </span>
+                                    </td>
+                                    <td class="py-3.5 px-space-md">
+                                        <p class="text-text-slate-muted line-clamp-2 leading-relaxed">
+                                            Conflicting border transit accounts; fingerprint mismatch against Damascus
+                                            2022 registry requires physical Iris scan re-intake. No dependent risk
+                                            identified.
+                                        </p>
+                                    </td>
+                                    <td class="py-3.5 px-space-md text-right whitespace-nowrap">
+                                        <button
+                                            class="px-3 py-1 rounded bg-surface-container hover:bg-primary hover:text-on-primary font-label-md text-label-md text-primary transition-all"
+                                            onclick="openModal('#JOR-88415', 'DENIED', 'Conflicting border transit accounts; fingerprint mismatch against Damascus 2022 registry requires physical Iris scan re-intake. No dependent risk identified.', 'Male', '1 Member', 'Independent', 'Literate')">
+                                            Review →
+                                        </button>
+                                    </td>
+                                </tr>
+                                <!-- Row 3: Approved Dual Care Large Household -->
+                                <tr class="hover:bg-surface-container-low transition-colors case-row"
+                                    data-literacy="literate" data-sole="no" data-status="APPROVED">
+                                    <td class="py-3.5 px-space-md font-medium text-primary">
+                                        <div class="flex items-center gap-1.5">
+                                            <span
+                                                class="material-symbols-outlined text-[16px] text-primary">badge</span>
+                                            <span
+                                                class="font-headline-sm text-title-md font-semibold text-primary">#JOR-88412</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-3.5 px-space-sm text-text-slate-muted whitespace-nowrap">23 Oct 2024
+                                    </td>
+                                    <td class="py-3.5 px-space-sm">
+                                        <span
+                                            class="inline-flex items-center px-2 py-0.5 rounded font-label-caps text-label-caps bg-secondary-fixed text-on-secondary-fixed font-bold">7
+                                            Members</span>
+                                    </td>
+                                    <td class="py-3.5 px-space-sm">
+                                        <div class="flex items-center gap-1 font-medium">
+                                            <span
+                                                class="material-symbols-outlined text-[16px] text-secondary">male</span>
+                                            <span class="">Male</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-3.5 px-space-sm">
+                                        <span
+                                            class="inline-flex items-center px-2 py-0.5 rounded font-label-caps text-label-caps bg-surface-container-high text-on-surface">
+                                            Shared Adult Care
+                                        </span>
+                                    </td>
+                                    <td class="py-3.5 px-space-sm">
+                                        <span class="text-[12px] text-text-slate-muted">Literate</span>
+                                    </td>
+                                    <td class="py-3.5 px-space-sm">
+                                        <span
+                                            class="inline-flex items-center gap-1 px-2.5 py-1 rounded font-label-caps text-label-caps bg-primary text-on-primary font-bold tracking-wider">
+                                            <span class="material-symbols-outlined text-[14px]">check_circle</span>
+                                            APPROVED
+                                        </span>
+                                    </td>
+                                    <td class="py-3.5 px-space-md">
+                                        <p class="text-text-slate-muted line-clamp-2 leading-relaxed">
+                                            Multi-generational family unit with elderly grandparent needing chronic
+                                            dialysis. Reassigned to Azraq Camp Sector 3 medical compound with emergency
+                                            food rations.
+                                        </p>
+                                    </td>
+                                    <td class="py-3.5 px-space-md text-right whitespace-nowrap">
+                                        <button
+                                            class="px-3 py-1 rounded bg-surface-container hover:bg-primary hover:text-on-primary font-label-md text-label-md text-primary transition-all"
+                                            onclick="openModal('#JOR-88412', 'APPROVED', 'Multi-generational family unit with elderly grandparent needing chronic dialysis. Reassigned to Azraq Camp Sector 3 medical compound with emergency food rations.', 'Male', '7 Members', 'Shared Care', 'Literate')">
+                                            Review →
+                                        </button>
+                                    </td>
+                                </tr>
+                                <!-- Row 4: Approved Female Sole Carer -->
+                                <tr class="hover:bg-surface-container-low transition-colors case-row"
+                                    data-literacy="illiterate" data-sole="yes" data-status="APPROVED">
+                                    <td class="py-3.5 px-space-md font-medium text-primary">
+                                        <div class="flex items-center gap-1.5">
+                                            <span
+                                                class="material-symbols-outlined text-[16px] text-primary">badge</span>
+                                            <span
+                                                class="font-headline-sm text-title-md font-semibold text-primary">#JOR-88408</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-3.5 px-space-sm text-text-slate-muted whitespace-nowrap">23 Oct 2024
+                                    </td>
+                                    <td class="py-3.5 px-space-sm">
+                                        <span
+                                            class="inline-flex items-center px-2 py-0.5 rounded font-label-caps text-label-caps bg-surface-container font-semibold text-on-surface">2
+                                            Members</span>
+                                    </td>
+                                    <td class="py-3.5 px-space-sm">
+                                        <div class="flex items-center gap-1 font-medium">
+                                            <span
+                                                class="material-symbols-outlined text-[16px] text-primary">female</span>
+                                            <span class="">Female</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-3.5 px-space-sm">
+                                        <span
+                                            class="inline-flex items-center gap-1 px-2 py-0.5 rounded font-label-caps text-label-caps bg-emergency-red text-on-primary font-bold">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-pure-white"></span>
+                                            Sole Carer
+                                        </span>
+                                    </td>
+                                    <td class="py-3.5 px-space-sm">
+                                        <span
+                                            class="inline-flex items-center gap-1 text-[12px] font-semibold text-accent-gold-deep">
+                                            <span class="material-symbols-outlined text-[14px]">volume_up</span>
+                                            1+ Illiterate
+                                        </span>
+                                    </td>
+                                    <td class="py-3.5 px-space-sm">
+                                        <span
+                                            class="inline-flex items-center gap-1 px-2.5 py-1 rounded font-label-caps text-label-caps bg-primary text-on-primary font-bold tracking-wider">
+                                            <span class="material-symbols-outlined text-[14px]">check_circle</span>
+                                            APPROVED
+                                        </span>
+                                    </td>
+                                    <td class="py-3.5 px-space-md">
+                                        <p class="text-text-slate-muted line-clamp-2 leading-relaxed">
+                                            Biometric distortion verified via secondary UN mission manifest; expedited
+                                            to rehydration clinic with infant child. Psychological first aid dispatched.
+                                        </p>
+                                    </td>
+                                    <td class="py-3.5 px-space-md text-right whitespace-nowrap">
+                                        <button
+                                            class="px-3 py-1 rounded bg-surface-container hover:bg-primary hover:text-on-primary font-label-md text-label-md text-primary transition-all"
+                                            onclick="openModal('#JOR-88408', 'APPROVED', 'Biometric distortion verified via secondary UN mission manifest; expedited to rehydration clinic with infant child. Psychological first aid dispatched.', 'Female', '2 Members', 'Sole Carer', '1+ Illiterate')">
+                                            Review →
+                                        </button>
+                                    </td>
+                                </tr>
+                                <!-- Row 5: Denied Security Duplicate -->
+                                <tr class="hover:bg-surface-container-low transition-colors case-row"
+                                    data-literacy="literate" data-sole="no" data-status="DENIED">
+                                    <td class="py-3.5 px-space-md font-medium text-primary">
+                                        <div class="flex items-center gap-1.5">
+                                            <span
+                                                class="material-symbols-outlined text-[16px] text-text-slate-muted">badge</span>
+                                            <span
+                                                class="font-headline-sm text-title-md font-semibold text-on-surface">#JOR-88399</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-3.5 px-space-sm text-text-slate-muted whitespace-nowrap">22 Oct 2024
+                                    </td>
+                                    <td class="py-3.5 px-space-sm">
+                                        <span
+                                            class="inline-flex items-center px-2 py-0.5 rounded font-label-caps text-label-caps bg-surface-container font-semibold text-on-surface">5
+                                            Members</span>
+                                    </td>
+                                    <td class="py-3.5 px-space-sm">
+                                        <div class="flex items-center gap-1 font-medium">
+                                            <span
+                                                class="material-symbols-outlined text-[16px] text-secondary">male</span>
+                                            <span class="">Male</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-3.5 px-space-sm">
+                                        <span
+                                            class="inline-flex items-center px-2 py-0.5 rounded font-label-caps text-label-caps bg-surface-container-high text-on-surface">
+                                            Shared Adult Care
+                                        </span>
+                                    </td>
+                                    <td class="py-3.5 px-space-sm">
+                                        <span class="text-[12px] text-text-slate-muted">Literate</span>
+                                    </td>
+                                    <td class="py-3.5 px-space-sm">
+                                        <span
+                                            class="inline-flex items-center gap-1 px-2.5 py-1 rounded font-label-caps text-label-caps bg-surface-container text-emergency-red font-bold tracking-wider">
+                                            <span class="material-symbols-outlined text-[14px]">cancel</span>
+                                            DENIED / DUPLICATE
+                                        </span>
+                                    </td>
+                                    <td class="py-3.5 px-space-md">
+                                        <p class="text-text-slate-muted line-clamp-2 leading-relaxed">
+                                            Prior active registration detected under Mafraq Urban Registry #AMM-20411.
+                                            Diverted to deduplication reconciler before further cash transfer
+                                            authorizations.
+                                        </p>
+                                    </td>
+                                    <td class="py-3.5 px-space-md text-right whitespace-nowrap">
+                                        <button
+                                            class="px-3 py-1 rounded bg-surface-container hover:bg-primary hover:text-on-primary font-label-md text-label-md text-primary transition-all"
+                                            onclick="openModal('#JOR-88399', 'DENIED', 'Prior active registration detected under Mafraq Urban Registry #AMM-20411. Diverted to deduplication reconciler before further cash transfer authorizations.', 'Male', '5 Members', 'Shared Care', 'Literate')">
+                                            Review →
+                                        </button>
+                                    </td>
+                                </tr>
+                                <!-- Row 6: Approved Female Headed Single Dependent -->
+                                <tr class="hover:bg-surface-container-low transition-colors case-row"
+                                    data-literacy="literate" data-sole="yes" data-status="APPROVED">
+                                    <td class="py-3.5 px-space-md font-medium text-primary">
+                                        <div class="flex items-center gap-1.5">
+                                            <span
+                                                class="material-symbols-outlined text-[16px] text-primary">badge</span>
+                                            <span
+                                                class="font-headline-sm text-title-md font-semibold text-primary">#JOR-88394</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-3.5 px-space-sm text-text-slate-muted whitespace-nowrap">22 Oct 2024
+                                    </td>
+                                    <td class="py-3.5 px-space-sm">
+                                        <span
+                                            class="inline-flex items-center px-2 py-0.5 rounded font-label-caps text-label-caps bg-surface-container font-semibold text-on-surface">3
+                                            Members</span>
+                                    </td>
+                                    <td class="py-3.5 px-space-sm">
+                                        <div class="flex items-center gap-1 font-medium">
+                                            <span
+                                                class="material-symbols-outlined text-[16px] text-primary">female</span>
+                                            <span class="">Female</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-3.5 px-space-sm">
+                                        <span
+                                            class="inline-flex items-center gap-1 px-2 py-0.5 rounded font-label-caps text-label-caps bg-emergency-red text-on-primary font-bold">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-pure-white"></span>
+                                            Sole Carer
+                                        </span>
+                                    </td>
+                                    <td class="py-3.5 px-space-sm">
+                                        <span class="text-[12px] text-text-slate-muted">Literate</span>
+                                    </td>
+                                    <td class="py-3.5 px-space-sm">
+                                        <span
+                                            class="inline-flex items-center gap-1 px-2.5 py-1 rounded font-label-caps text-label-caps bg-primary text-on-primary font-bold tracking-wider">
+                                            <span class="material-symbols-outlined text-[14px]">check_circle</span>
+                                            APPROVED
+                                        </span>
+                                    </td>
+                                    <td class="py-3.5 px-space-md">
+                                        <p class="text-text-slate-muted line-clamp-2 leading-relaxed">
+                                            Widowed mother traveling with adolescent sister and infant son. Clean
+                                            cross-border manifest reconciliation. Approved for transitional shelter
+                                            voucher voucher series 9.
+                                        </p>
+                                    </td>
+                                    <td class="py-3.5 px-space-md text-right whitespace-nowrap">
+                                        <button
+                                            class="px-3 py-1 rounded bg-surface-container hover:bg-primary hover:text-on-primary font-label-md text-label-md text-primary transition-all"
+                                            onclick="openModal('#JOR-88394', 'APPROVED', 'Widowed mother traveling with adolescent sister and infant son. Clean cross-border manifest reconciliation. Approved for transitional shelter voucher voucher series 9.', 'Female', '3 Members', 'Sole Carer', 'Literate')">
+                                            Review →
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Table Pagination & Counter -->
+                    <div
+                        class="p-space-md bg-surface-container-lowest flex flex-col sm:flex-row items-center justify-between gap-space-sm">
+                        <div class="flex items-center gap-2">
+                            <span class="font-body-sm text-body-sm text-text-slate-muted">Showing</span>
+                            <span class="font-headline-sm text-title-md font-semibold text-on-surface">1–6</span>
+                            <span class="font-body-sm text-body-sm text-text-slate-muted">of 124 reviewed
+                                dossiers</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <button
+                                class="px-3 py-1.5 rounded font-label-md text-label-md bg-surface-container text-text-slate-muted cursor-not-allowed opacity-60">Prev</button>
+                            <button
+                                class="px-3 py-1.5 rounded font-label-md text-label-md bg-primary text-on-primary font-bold">1</button>
+                            <button
+                                class="px-3 py-1.5 rounded font-label-md text-label-md bg-surface-container text-on-surface hover:bg-secondary-container">2</button>
+                            <button
+                                class="px-3 py-1.5 rounded font-label-md text-label-md bg-surface-container text-on-surface hover:bg-secondary-container">3</button>
+                            <span class="px-1 text-text-slate-muted">...</span>
+                            <button
+                                class="px-3 py-1.5 rounded font-label-md text-label-md bg-surface-container text-on-surface hover:bg-secondary-container">21</button>
+                            <button
+                                class="px-3 py-1.5 rounded font-label-md text-label-md bg-surface-container text-primary font-semibold hover:bg-secondary-container">Next</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Operational Field Context Banner -->
+
+                <!-- Dossier Detail Modal (Hidden by default) -->
+                <div class="fixed inset-0 z-50 flex items-center justify-center bg-inverse-surface/50 backdrop-blur-sm hidden"
+                    id="dossier-modal">
+                    <div
+                        class="bg-surface-container-lowest rounded-xl max-w-xl w-full mx-4 shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+                        <div class="bg-surface-container-low p-space-md flex items-center justify-between">
+                            <div class="flex items-center gap-space-sm">
+                                <span
+                                    class="material-symbols-outlined text-primary text-[24px]">folder_supervised</span>
+                                <div>
+                                    <h3 class="font-headline-sm text-headline-sm text-on-surface" id="modal-case-id">
+                                        #JOR-00000</h3>
+                                    <span
+                                        class="font-label-caps text-label-caps text-text-slate-muted uppercase">De-identified
+                                        Protection Dossier</span>
+                                </div>
+                            </div>
+                            <button
+                                class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-text-slate-muted hover:text-on-surface"
+                                onclick="closeModal()">
+                                <span class="material-symbols-outlined text-[20px]">close</span>
+                            </button>
+                        </div>
+                        <div class="p-space-md flex flex-col gap-space-md">
+                            <!-- Badge row -->
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span
+                                    class="px-2.5 py-1 rounded font-label-caps text-label-caps font-bold tracking-wider"
+                                    id="modal-status-badge"></span>
+                                <span
+                                    class="px-2 py-0.5 rounded font-label-caps text-label-caps bg-surface-container text-on-surface"
+                                    id="modal-head"></span>
+                                <span
+                                    class="px-2 py-0.5 rounded font-label-caps text-label-caps bg-surface-container text-on-surface"
+                                    id="modal-size"></span>
+                                <span
+                                    class="px-2 py-0.5 rounded font-label-caps text-label-caps bg-surface-container text-on-surface"
+                                    id="modal-carer"></span>
+                                <span
+                                    class="px-2 py-0.5 rounded font-label-caps text-label-caps bg-surface-container text-on-surface"
+                                    id="modal-literacy"></span>
+                            </div>
+                            <div>
+                                <span
+                                    class="font-label-caps text-label-caps text-text-slate-muted uppercase tracking-wider">Adjudicating
+                                    Officer Determination Notes</span>
+                                <div class="mt-1.5 p-3 rounded-lg bg-surface-container-low text-body-md font-body-md text-on-surface leading-relaxed"
+                                    id="modal-rationale"></div>
+                            </div>
+                            <div
+                                class="bg-surface-subtle p-3 rounded-lg flex items-center justify-between text-body-sm font-body-sm">
+                                <div class="flex items-center gap-2">
+                                    <span
+                                        class="material-symbols-outlined text-primary text-[18px]">verified_user</span>
+                                    <span class="">Tamper-evident hash: 0x9f18b3...de4</span>
+                                </div>
+                                <span class="text-text-slate-muted font-label-caps text-[10px]">ECC-256 SIGNED</span>
+                            </div>
+                        </div>
+                        <div class="bg-surface-container-low p-space-md flex justify-end gap-space-sm">
+                            <button
+                                class="px-4 py-2 rounded-lg bg-surface-container font-label-md text-label-md text-on-surface hover:bg-secondary-container"
+                                onclick="closeModal()">Close Summary</button>
+                            <button
+                                class="px-4 py-2 rounded-lg bg-primary text-on-primary font-label-md text-label-md hover:bg-primary-container flex items-center gap-1.5"
+                                onclick="alert('Full de-identified file dispatched to secure print station.')">
+                                <span class="material-symbols-outlined text-[18px]">print</span>
+                                Print Official Record
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                    // Ensure the App Shell navigation reflects the active Dashboard view
+                    (function initNavState() {
+                        const navLinks = document.querySelectorAll('aside nav a');
+                        navLinks.forEach(link => {
+                            const path = link.getAttribute('data-path');
+                            if (path === 'dashboard') {
+                                link.classList.remove('text-on-surface-variant', 'hover:bg-surface-container-high');
+                                link.classList.add('bg-primary-container', 'text-on-primary', 'font-semibold');
+                            } else {
+                                link.classList.remove('bg-primary-container', 'text-on-primary', 'font-semibold');
+                                link.classList.add('text-on-surface-variant', 'hover:bg-surface-container-high');
+                            }
+                        });
+                    })();
+
+                // Filter Table by Status Pill (All, Approved, Denied)
+                function filterCases(status) {
+                    const rows = document.querySelectorAll('.case-row');
+                    const buttons = document.querySelectorAll('.status-tab-btn');
+
+                    buttons.forEach(btn => {
+                        btn.classList.remove('bg-primary', 'text-on-primary', 'font-semibold');
+                        btn.classList.add('text-text-slate-muted');
+                    });
+
+                    if (status === 'all') {
+                        document.getElementById('btn-filter-all').classList.add('bg-primary', 'text-on-primary', 'font-semibold');
+                        document.getElementById('btn-filter-all').classList.remove('text-text-slate-muted');
+                    } else if (status === 'APPROVED') {
+                        document.getElementById('btn-filter-approved').classList.add('bg-primary', 'text-on-primary', 'font-semibold');
+                        document.getElementById('btn-filter-approved').classList.remove('text-text-slate-muted');
+                    } else if (status === 'DENIED') {
+                        document.getElementById('btn-filter-denied').classList.add('bg-primary', 'text-on-primary', 'font-semibold');
+                        document.getElementById('btn-filter-denied').classList.remove('text-text-slate-muted');
+                    }
+
+                    rows.forEach(row => {
+                        const rowStatus = row.getAttribute('data-status');
+                        if (status === 'all' || rowStatus === status) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+                }
+
+                // Filter by Special Protection Criteria
+                function filterByPriority(type) {
+                    const rows = document.querySelectorAll('.case-row');
+                    const pills = document.querySelectorAll('.priority-pill');
+
+                    pills.forEach(p => {
+                        p.classList.remove('bg-surface-container', 'text-primary', 'font-bold');
+                        p.classList.add('text-text-slate-muted');
+                    });
+
+                    event.target.classList.add('bg-surface-container', 'text-primary', 'font-bold');
+                    event.target.classList.remove('text-text-slate-muted');
+
+                    rows.forEach(row => {
+                        if (type === 'all') {
+                            row.style.display = '';
+                        } else if (type === 'sole') {
+                            row.style.display = (row.getAttribute('data-sole') === 'yes') ? '' : 'none';
+                        } else if (type === 'illiterate') {
+                            row.style.display = (row.getAttribute('data-literacy') === 'illiterate') ? '' : 'none';
+                        }
+                    });
+                }
+
+                // Search filter
+                function searchCasesTable() {
+                    const input = document.getElementById('case-search-input');
+                    const filter = input.value.toLowerCase();
+                    const rows = document.querySelectorAll('.case-row');
+
+                    rows.forEach(row => {
+                        const text = row.textContent.toLowerCase();
+                        if (text.includes(filter)) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+                }
+
+                // Export report alert simulation
+                function downloadCSVReport() {
+                    const csvContent = "data:text/csv;charset=utf-8,Case_ID,Adjudication_Date,HH_Size,Head_Of_Household,Sole_Carer,Literacy,Determination,Operator_Rationale\n" +
+                        "#JOR-88419,2024-10-24,4,Female,Yes,1+ Illiterate,APPROVED,Single female guardian with 3 minors under 6. Emergency grant cleared.\n" +
+                        "#JOR-88415,2024-10-24,1,Male,No,Literate,DENIED,Biometric mismatch requires iris scan re-intake.\n" +
+                        "#JOR-88412,2024-10-23,7,Male,No,Literate,APPROVED,Multi-generational family unit with elderly dialysis dependent.\n" +
+                        "#JOR-88408,2024-10-23,2,Female,Yes,1+ Illiterate,APPROVED,Biometric distortion verified via secondary manifest.\n" +
+                        "#JOR-88399,2024-10-22,5,Male,No,Literate,DENIED,Prior active registration duplicate under Mafraq Urban.\n" +
+                        "#JOR-88394,2024-10-22,3,Female,Yes,Literate,APPROVED,Widowed mother with sister and infant.";
+
+                    const encodedUri = encodeURI(csvContent);
+                    const link = document.createElement("a");
+                    link.setAttribute("href", encodedUri);
+                    link.setAttribute("download", "UNHCR_Triage_Reviewed_Cases_Oct2024.csv");
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+
+                // Detail Modal Controls
+                function openModal(id, status, rationale, head, size, carer, literacy) {
+                    document.getElementById('modal-case-id').innerText = id;
+                    document.getElementById('modal-rationale').innerText = rationale;
+                    document.getElementById('modal-head').innerText = 'Head: ' + head;
+                    document.getElementById('modal-size').innerText = size;
+                    document.getElementById('modal-carer').innerText = carer;
+                    document.getElementById('modal-literacy').innerText = literacy;
+
+                    const badge = document.getElementById('modal-status-badge');
+                    if (status === 'APPROVED') {
+                        badge.className = 'px-2.5 py-1 rounded font-label-caps text-label-caps font-bold tracking-wider bg-primary text-on-primary';
+                        badge.innerText = 'STATUS: APPROVED';
+                    } else {
+                        badge.className = 'px-2.5 py-1 rounded font-label-caps text-label-caps font-bold tracking-wider bg-surface-container text-emergency-red';
+                        badge.innerText = 'STATUS: DENIED / RE-INTAKE';
+                    }
+
+                    document.getElementById('dossier-modal').classList.remove('hidden');
+                }
+
+                function closeModal() {
+                    document.getElementById('dossier-modal').classList.add('hidden');
+                }
+
+                // Close modal on escape
+                document.addEventListener('keydown', function (event) {
+                    if (event.key === 'Escape') {
+                        closeModal();
+                    }
+                });
+            </script>
+        </main>
+    </div>
+
+
+</body>
+
+</html>
