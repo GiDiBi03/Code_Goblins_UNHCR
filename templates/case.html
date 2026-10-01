@@ -1,0 +1,26 @@
+<div class="cx-case-head">
+  <div>
+    <span class="cx-caps">Caso en revisión (anónimo)</span>
+    <h1>Caso #${caso_id}</h1>
+  </div>
+  <div style="display:flex;align-items:center;gap:1rem">
+    <div class="score"><span class="cx-caps">Índice de uncertainty</span><b class="cx-col-${nivel}">${unc}%</b></div>
+    <span class="cx-pill ${nivel}">${nivel_txt} uncertainty</span>
+  </div>
+</div>
+<div class="cx-case-body">
+  <div class="cx-info-grid">
+    <div class="cx-info">
+      <div class="cx-info-icon"><span class="mso">calendar_month</span></div>
+      <div><span class="cx-caps">Mes de entrevista</span><p class="big">${mes}</p><span class="small">Sede: ${oficina}</span></div>
+    </div>
+    <div class="cx-info" style="align-items:center">
+      <div class="cx-ring" style="--p:${unc_int};--ring:${ring}"><div class="in"><b>${unc_int}%</b><small>Índice</small></div></div>
+      <div><span class="cx-caps">Recomendación</span><p class="big">${recomendacion}</p><span class="small">EligibilityTarget · requiere tu decisión</span></div>
+    </div>
+  </div>
+  <div class="cx-note">
+    <span class="mso">lock</span>
+    <div><b>Revisión anónima</b><p>El caso no muestra datos que identifiquen al hogar. Los datos son sintéticos (muestra S8) y la uncertainty es simulada.</p></div>
+  </div>
+</div>
