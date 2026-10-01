@@ -11,7 +11,7 @@ data = pd.read_csv('Data/S8.synthetic_cashy_sample.csv')
 # create a new column
 unc_percent = np.random.default_rng(42)
 data["Uncertainty %"] = unc_percent.uniform(0, 100, size=len(data)).round(2)
-print(data.columns)
+#print(data.columns)
 
 data.to_csv('Data/S8.synthetic_cashy_sample.csv', index=False)
 print(pd.read_csv('Data/S8.synthetic_cashy_sample.csv').columns.tolist())
@@ -19,5 +19,6 @@ print(pd.read_csv('Data/S8.synthetic_cashy_sample.csv').columns.tolist())
 # handle missing values and NAN's
 na_detection = data.isna().sum()
 missing = na_detection[na_detection > 0]
-print(missing)
-print(missing[1])
+#print(missing)
+#print(missing[1])
+print(data.head())
