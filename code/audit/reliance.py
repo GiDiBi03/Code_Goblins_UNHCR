@@ -32,6 +32,7 @@ def make_placeholder_ai(df, truth_col="EligibilityTarget",
     opposite = df[truth_col].map({"INCLUSION": "EXCLUSION", "EXCLUSION": "INCLUSION"})
     out = df.copy()
     out["ai_recommendation"] = opposite.where(flip, df[truth_col])
+    out["p_wrong"] = p_wrong
     return out
 
 def wilson_ci(k, n, z=1.96):
@@ -105,3 +106,16 @@ def power_sim(n_cw, n_cases, base=0.80, drop=0.15, kappa=8,
         if stats.ttest_ind(xc, xt, equal_var=False).pvalue < alpha:
             hits += 1
     return hits / n_sims
+
+def build_queues(data, caseworkers, n_inc=6, n_exc=4, n_right=10, seed=0):
+    """One planned queue per caseworker, drawn from all offices."""
+    rng = np.random.default_rng(seed)
+    quota = {"wrongly_include": n_inc, "wrongly_exclude": n_exc, "AI_right": n_right}
+    pools = {c: data.loc[data["cell"] == c, "caseID"].to_numpy() for c in quota}
+    rows = []
+    for cw in caseworkers:
+        ids = np.concatenate([rng.choice(pools[c], quota[c], replace=False) for c in quota])
+        rng.shuffle(ids)
+        for pos, cid in enumerate(ids):
+            rows.append({"CaseworkerID": cw, "caseID": cid, "position": pos})
+    return pd.DataFrame(rows)
