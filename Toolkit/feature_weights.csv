@@ -1,0 +1,74 @@
+feature,weight
+month=2023-06,-0.17710014
+month=2023-07,-0.30094820
+month=2023-08,0.08921397
+month=2023-09,0.00540148
+month=2023-10,0.11372332
+month=2023-11,0.14559355
+month=2023-12,0.20901907
+month=2024-01,0.26177117
+month=2024-02,0.12163200
+month=2024-03,0.09664084
+month=2024-04,-0.20220514
+month=2024-05,-0.20485687
+month=2024-06,-0.29773264
+month=2024-07,-0.06795284
+month=UNKNOWN,0.00000000
+OficinaACNUR=MISSING_NOT_APPLICABLE,-0.02604943
+OficinaACNUR=UNKNOWN,0.00000000
+OficinaACNUR=fomon,-0.00540099
+OficinaACNUR=foten,0.00999806
+OficinaACNUR=fupal,-0.03355529
+OficinaACNUR=fusal,-0.00596468
+OficinaACNUR=futij,-0.04020411
+OficinaACNUR=pcr_cdmx,0.00907346
+OficinaACNUR=sotap,-0.11569745
+Demographics.HH.Head,-0.07733419
+Demographics.HH.Head [missing],0.00000000
+Demographics.Language,0.01365143
+Demographics.Language [missing],0.00000000
+Demographics.Profiles,0.09715202
+Demographics.Profiles [missing],0.00000000
+Demographics.Documentation,-0.00664335
+Demographics.Documentation [missing],0.00000000
+Needs_and_Coping.BasicNeeds,0.07739662
+Needs_and_Coping.BasicNeeds [missing],0.00000000
+Needs_and_Coping.Housing,0.07080563
+Needs_and_Coping.Housing [missing],0.00000000
+Needs_and_Coping.Neg.mechanism,-0.04083350
+Needs_and_Coping.Neg.mechanism [missing],0.00000000
+Needs_and_Coping.Dependency,-0.01383458
+Needs_and_Coping.Dependency [missing],0.00000000
+NumIntegrantes,-0.01093817
+NumIntegrantes [missing],0.00000000
+dependencyCategory=UNKNOWN,0.00000000
+dependencyCategory=average,-0.02691479
+dependencyCategory=complete,-0.03751532
+dependencyCategory=high,-0.04678805
+dependencyCategory=low,-0.09658228
+FemaleHeadedHousehold=MISSING_NOT_APPLICABLE,-0.06442967
+FemaleHeadedHousehold=UNKNOWN,0.00000000
+FemaleHeadedHousehold=jefatura_femenina,-0.06993606
+FemaleHeadedHousehold=jefatura_masculina,-0.07343471
+CuidadorSolo=MISSING_NOT_APPLICABLE,-0.06442967
+CuidadorSolo=UNKNOWN,0.00000000
+CuidadorSolo=no,-0.02047747
+CuidadorSolo=si,-0.12289329
+HablaEspanol=UNKNOWN,0.00000000
+HablaEspanol=espanol_ningun_adulto,-0.07290755
+HablaEspanol=espanol_uno_mas_adultos,-0.13489289
+Analfabeta_si=UNKNOWN,0.00000000
+Analfabeta_si=adultos_ninguno_analfabeta,-0.19948455
+Analfabeta_si=adultos_uno_mas_analfabeta,-0.00831589
+ScoreCOMAR_PIL=FLAG_+500,-0.01234210
+ScoreCOMAR_PIL=FLAG_-500,-0.13481813
+ScoreCOMAR_PIL=MISSING_NOT_APPLICABLE,-0.05319083
+ScoreCOMAR_PIL=UNKNOWN,0.00000000
+ScoreCOMAR_PIL=ZERO,-0.00744938
+ScoreIntenciones=FLAG_-500,0.03087208
+ScoreIntenciones=UNKNOWN,0.00000000
+ScoreIntenciones=ZERO,-0.23867251
+ScoreDuplicidad=FLAG_-500,0.02696700
+ScoreDuplicidad=UNKNOWN,0.00000000
+ScoreDuplicidad=ZERO,-0.23476743
+calibrated_intercept,-0.17971757

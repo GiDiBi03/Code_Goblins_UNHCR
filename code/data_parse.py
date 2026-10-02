@@ -2,10 +2,19 @@ import pandas as pd
 import numpy as np
 
 data = pd.read_csv('Data/S8.synthetic_cashy_sample.csv')
+# the script saves back into the same file: drop the columns it created on a previous run
+data = data.drop(columns=[c for c in ['caseID', 'CaseworkerID', 'Uncertainty %', 'ai_recomandation'] if c in data.columns])
 
-# placeholder uncertainty column
-unc_percent = np.random.default_rng(42)
-data["Uncertainty %"] = unc_percent.uniform(0, 100, size=len(data)).round(2)
+# uncertainty column from the toolkit: run `python code/uncertain_Toolkit.py` first
+try:
+    unc = pd.read_csv('Data/S8_with_uncertainty.csv')
+except FileNotFoundError:
+    raise SystemExit("Data/S8_with_uncertainty.csv not found. Run `python code/uncertain_Toolkit.py` first.")
+if not (len(unc) == len(data)
+        and (unc['month'].astype(str).values == data['month'].astype(str).values).all()
+        and (unc['EligibilityTarget'].values == data['EligibilityTarget'].values).all()):
+    raise SystemExit("Data/S8_with_uncertainty.csv does not line up with the S8 rows (month / EligibilityTarget).")
+data["Uncertainty %"] = unc["Uncertainty %"].values
 
 # handle missing values and NaNs
 na_detection = data.isna().sum()
@@ -15,8 +24,8 @@ missing = na_detection[na_detection > 0]
 data["ai_recomandation"] = pd.qcut(data["FinalScore"], q=3, labels=["low", "medium", "high"])
 
 # add caseID
-#values = list(range(1,len(data)+1))
-#data.insert(0, 'caseID', values)
+values = list(range(1,len(data)+1))
+data.insert(0, 'caseID', values)
 # print(data["caseID"])
 
 # create caseworkersID
@@ -39,8 +48,8 @@ def assign_caseworker(office):
     return np.random.choice(office_caseworkers[office])
 
 # 3. Generate the values and insert as the second column (index 1)
-"""caseworker_col = data['OficinaACNUR'].apply(assign_caseworker)
-data.insert(1, 'CaseworkerID', caseworker_col)"""
+caseworker_col = data['OficinaACNUR'].apply(assign_caseworker)
+data.insert(1, 'CaseworkerID', caseworker_col)
 
 # save AFTER all columns have been created
 data.to_csv('Data/S8.synthetic_cashy_sample.csv', index=False)

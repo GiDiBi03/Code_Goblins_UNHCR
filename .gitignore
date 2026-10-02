@@ -4,3 +4,13 @@ __pycache__/
 .DS_Store
 __pycache__/
 *.pyc
+
+# Generated database and local files
+Thumbs.db
+.idea/
+.venv/
+venv/
+code/*.db
+code/*.db-wal
+code/*.db-shm
+~$*

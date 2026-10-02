@@ -280,3 +280,24 @@ html, body, .stApp, [data-testid="stAppViewContainer"] {
 .st-key-btn_confirmar button *, .st-key-btn_confirmar_mod button * { color: #fff !important; }
 .st-key-btn_modificar button * { color: var(--red) !important; }
 [data-testid="stToast"] * { color: var(--inverse-on-surface) !important; }
+
+/* ---------- blind review: Include / Exclude buttons and KPI tiles ---------- */
+:root { --green: #1f7a3d; --green-dark: #17602f; }
+.st-key-btn_exclude button { background: var(--red) !important; color: #fff !important; border: none !important; box-shadow: 0 4px 6px rgba(0,0,0,.1); }
+.st-key-btn_exclude button:hover { background: #b62d16 !important; }
+.st-key-btn_include button { background: var(--green) !important; color: #fff !important; border: none !important; box-shadow: 0 4px 6px rgba(0,0,0,.1); }
+.st-key-btn_include button:hover { background: var(--green-dark) !important; }
+.st-key-btn_exclude button *, .st-key-btn_include button * { color: #fff !important; }
+.st-key-acciones button:disabled { opacity: .45; }
+.cx-kpis { grid-template-columns: repeat(5, 1fr); }
+@media (max-width: 900px) { .cx-kpis { grid-template-columns: repeat(2, 1fr); } }
+.cx-kpi.inc b { color: var(--green) !important; }
+.cx-kpi.dis b { color: #8b6900 !important; }
+.cx-kpi .small { font: 400 12px/16px "Source Sans 3", sans-serif; color: var(--muted); display: block; }
+
+/* ---------- AI recommendation pill next to the FinalScore (neutral: it is not an uncertainty level) ---------- */
+.cx-airec { display: inline-block; vertical-align: middle; margin-left: .5rem; padding: 3px 10px; border-radius: .75rem;
+  font: 700 11px/16px "Work Sans", sans-serif; letter-spacing: .08em; text-transform: uppercase;
+  border: 1px solid var(--primary); color: var(--primary); background: var(--surface-lowest); white-space: nowrap; }
+.cx-airec.high { background: var(--primary); color: #fff !important; }
+.cx-airec.medium { background: var(--surface-container); }

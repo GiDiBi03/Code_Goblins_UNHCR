@@ -1,18 +1,24 @@
 """
-Cashy - review of high-uncertainty cases (pipeline steps 4 and 5).
+Cashy - blind review of cases (pipeline steps 4 and 5). The user interface is in English.
 
-Reads the `casos` table from the SQLite database. The caseworker picks their office
-(OficinaACNUR), picks a pending case from the queue and either confirms its
-EligibilityTarget ("Confirmar recomendación") or modifies it with a mandatory note
-("Modificar con nota"). On save:
-  1. a row is appended to `revisiones` with all the case data + the review;
+FinalScore is the score produced by Cashy. EligibilityTarget (and Elegibilidad, which encodes the
+same decision) is the operation's final recorded decision; neither is shown on screen, so the
+caseworker decides blind using the uncertainty, the FinalScore, the ai_recomandation (low / medium /
+high, the FinalScore tercile from data_parse.py) and the household/scorecard fields.
+
+The user picks the office, then their caseworker ID from the caseworkers assigned to that office
+(CaseworkerID, created by data_parse.py), picks a pending case and presses "Include" or "Exclude"
+(an optional note can be written first). On save:
+  1. a row is appended to `revisiones` with all the case data, the blind decision in
+     EligibilityTarget2, the note, reviewer, office and timestamp;
   2. in `casos`, uncertainty_pct becomes -uncertainty_pct (negative = reviewed), so the
      case leaves the queue.
 Both happen in a single transaction: either both succeed or neither does.
+EligibilityTarget2 != EligibilityTarget marks a disagreement between the blind review and the
+recorded decision; the "Reviewed cases" view counts and lists them.
 
-Look and feel follow web_pages.html: CSS in static/style.css, HTML snippets in
-templates/*.html (string.Template, ${var}), theme in .streamlit/config.toml.
-The user interface is in Spanish.
+Look and feel: CSS in static/style.css, HTML snippets in templates/*.html (string.Template,
+${var}), theme in .streamlit/config.toml.
 
 Run (from the repository root):  streamlit run code/app.py
 Database: code/cashy.db (or the path in the CASHY_DB environment variable)
@@ -32,83 +38,101 @@ STATIC = os.path.join(ROOT, "static")        # CSS
 TEMPLATES = os.path.join(ROOT, "templates")  # HTML snippets (string.Template, ${var})
 DB = os.environ.get("CASHY_DB", os.path.join(HERE, "cashy.db"))
 
-# Recommendation the caseworker confirms or modifies.
-REC = "EligibilityTarget"
-# Combobox label for cases with an empty OficinaACNUR.
-SIN_OFICINA = "(sin oficina)"
-# Uncertainty bands used only for colours/labels (same breakpoints as web_pages.html).
-BANDAS = [(80, "alta", "Alta", "#D9381E"), (70, "media", "Media", "#8b6900"), (0, "baja", "Baja", "#005994")]
-POR_PAGINA = 12
+RECORDED = "EligibilityTarget"   # recorded final decision: never shown, used only for comparison
+BLIND = "EligibilityTarget2"     # the caseworker's blind decision
+HIDDEN = {"EligibilityTarget", "Elegibilidad"}
+NO_OFFICE = "(no office)"        # combobox label for cases with an empty OficinaACNUR
+AI_REC = "ai_recomandation"      # column name as created by data_parse.py (low / medium / high)
 
-GRUPOS = {
-    "Registro": ["month", "OficinaACNUR", "NumIntegrantes", "dependencyCategory",
-                 "FemaleHeadedHousehold", "CuidadorSolo", "HablaEspanol", "Analfabeta_si"],
-    "Puntajes": ["FinalScore", "Demographics_Score", "NeedsandCoping_Score",
-                 "Vulnerability_Score", "Vulnerability_Category"],
-    "Factores del Scorecard": ["Demographics.HH.Head", "Demographics.Language", "Demographics.Profiles",
-                               "Demographics.Documentation", "Needs_and_Coping.BasicNeeds",
-                               "Needs_and_Coping.Housing", "Needs_and_Coping.Neg.mechanism",
-                               "Needs_and_Coping.Dependency"],
-    "Flags administrativos": ["ScoreCOMAR_PIL", "ScoreIntenciones", "ScoreDuplicidad"],
+# Uncertainty bands, used only for colours/labels. The Toolkit's uncertainty is min(p, 1-p), so it
+# never exceeds 50; the cut-offs are percentiles of all cases instead of fixed values:
+# top 10% = "High" (red), next 30% = "Medium" (gold), rest = "Low" (blue).
+PCT_HIGH, PCT_MEDIUM = 0.90, 0.60
+STYLES = {"alta": ("High", "#D9381E"), "media": ("Medium", "#8b6900"), "baja": ("Low", "#005994")}
+PAGE_SIZE = 12
+
+GROUPS = {
+    "Household": ["caseID", "CaseworkerID", "month", "OficinaACNUR", "NumIntegrantes", "dependencyCategory",
+                  "FemaleHeadedHousehold", "CuidadorSolo", "HablaEspanol", "Analfabeta_si"],
+    "Cashy scores": ["FinalScore", AI_REC, "Demographics_Score", "NeedsandCoping_Score",
+                     "Vulnerability_Score", "Vulnerability_Category"],
+    "Scorecard factors": ["Demographics.HH.Head", "Demographics.Language", "Demographics.Profiles",
+                          "Demographics.Documentation", "Needs_and_Coping.BasicNeeds",
+                          "Needs_and_Coping.Housing", "Needs_and_Coping.Neg.mechanism",
+                          "Needs_and_Coping.Dependency"],
+    "Administrative flags": ["ScoreCOMAR_PIL", "ScoreIntenciones", "ScoreDuplicidad"],
 }
+assert not HIDDEN & {c for cols in GROUPS.values() for c in cols}, "a hidden column is listed on screen"
 
 
-def conectar():
+# ---------------------------------------------------------------- data layer
+def connect():
     if not os.path.exists(DB):
-        st.error(f"No encuentro la base `{DB}`. Créala primero: `python code/data_parse.py` y luego `python code/create_db.py`")
+        st.error(f"Database `{DB}` not found. Create it first: `python code/data_parse.py` "
+                 "and then `python code/create_db.py`")
         st.stop()
     con = sqlite3.connect(DB, timeout=10, isolation_level=None)  # manual transactions
     con.row_factory = sqlite3.Row
+    cols = {r[1] for r in con.execute("PRAGMA table_info(revisiones)")}
+    if BLIND not in cols:
+        st.error("This database has the old `revisiones` layout (accion / decision_overriden). "
+                 "Recreate it: `python code/create_db.py --reset`")
+        st.stop()
     return con
 
 
-def sedes(con):
-    lista = [r[0] for r in con.execute(
+def offices(con):
+    names = [r[0] for r in con.execute(
         "SELECT DISTINCT OficinaACNUR FROM casos WHERE OficinaACNUR IS NOT NULL ORDER BY 1")]
     if con.execute("SELECT 1 FROM casos WHERE OficinaACNUR IS NULL LIMIT 1").fetchone():
-        lista.append(SIN_OFICINA)
-    return lista
+        names.append(NO_OFFICE)
+    return names
 
 
-def filtro_sede(sede):
-    if sede == SIN_OFICINA:
+def caseworkers(con, office):
+    """Caseworker IDs assigned (CaseworkerID) to cases of this office."""
+    cond, p = office_filter(office)
+    return [r[0] for r in con.execute(
+        f"SELECT DISTINCT CaseworkerID FROM casos WHERE CaseworkerID IS NOT NULL AND {cond} ORDER BY 1", p)]
+
+
+def office_filter(office):
+    if office == NO_OFFICE:
         return "OficinaACNUR IS NULL", ()
-    return "OficinaACNUR = ?", (sede,)
+    return "OficinaACNUR = ?", (office,)
 
 
-def pendientes(con, minimo, sede):
-    cond, p = filtro_sede(sede)
+def pending(con, minimum, office):
+    cond, p = office_filter(office)
     return pd.read_sql_query(
         f"SELECT * FROM casos WHERE uncertainty_pct > 0 AND uncertainty_pct >= ? AND {cond} "
-        "ORDER BY uncertainty_pct DESC", con, params=(minimo, *p))
+        "ORDER BY uncertainty_pct DESC", con, params=(minimum, *p))
 
 
-def guardar_revision(caso_id, accion, decision, nota, revisor, sede):
-    """Copy the case to `revisiones` and mark it as reviewed in `casos`. Atomic.
-    Opens its own connection: the modify dialog runs in a different thread than the page."""
+def save_review(case_id, decision, note, reviewer, office):
+    """Copy the case to `revisiones` with the blind decision and mark it as reviewed. Atomic."""
     con = sqlite3.connect(DB, timeout=10, isolation_level=None)
     con.row_factory = sqlite3.Row
     con.execute("BEGIN IMMEDIATE")
     try:
-        fila = con.execute("SELECT * FROM casos WHERE caso_id = ? AND uncertainty_pct > 0",
-                           (caso_id,)).fetchone()
-        if fila is None:
-            raise ValueError("Este caso ya fue revisado por otra persona.")
-        datos = {k: fila[k] for k in fila.keys() if k != "uncertainty_pct"}
-        datos.update({
-            "uncertainty_original": fila["uncertainty_pct"],
-            "accion": accion,
-            "decision_overriden": decision,
-            "nota": nota.strip() or None,
-            "revisor": revisor.strip(),
-            "sede_revisor": sede,
+        row = con.execute("SELECT * FROM casos WHERE caso_id = ? AND uncertainty_pct > 0",
+                          (case_id,)).fetchone()
+        if row is None:
+            raise ValueError("This case has already been reviewed.")
+        data = {k: row[k] for k in row.keys() if k != "uncertainty_pct"}
+        data.update({
+            "uncertainty_original": row["uncertainty_pct"],
+            BLIND: decision,
+            "nota": (note or "").strip() or None,
+            "revisor": reviewer.strip(),
+            "sede_revisor": office,
             "fecha_revision": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         })
-        cols = ", ".join(f'"{c}"' for c in datos)
-        marcas = ", ".join("?" for _ in datos)
-        con.execute(f"INSERT INTO revisiones ({cols}) VALUES ({marcas})", list(datos.values()))
+        cols = ", ".join(f'"{c}"' for c in data)
+        marks = ", ".join("?" for _ in data)
+        con.execute(f"INSERT INTO revisiones ({cols}) VALUES ({marks})", list(data.values()))
         con.execute("UPDATE casos SET uncertainty_pct = -uncertainty_pct "
-                    "WHERE caso_id = ? AND uncertainty_pct > 0", (caso_id,))
+                    "WHERE caso_id = ? AND uncertainty_pct > 0", (case_id,))
         con.execute("COMMIT")
     except Exception:
         con.execute("ROLLBACK")
@@ -118,7 +142,7 @@ def guardar_revision(caso_id, accion, decision, nota, revisor, sede):
 
 
 # ---------------------------------------------------------------- presentation helpers
-def cargar_css():
+def load_css():
     with open(os.path.join(STATIC, "style.css"), encoding="utf-8") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
@@ -126,24 +150,29 @@ def cargar_css():
 _cache = {}
 
 
-def plantilla(nombre, **valores):
-    """Render templates/<nombre>.html; every value is HTML-escaped."""
-    if nombre not in _cache:
-        with open(os.path.join(TEMPLATES, f"{nombre}.html"), encoding="utf-8") as f:
-            _cache[nombre] = Template(f.read())
-    seguros = {k: html.escape(str(v)) for k, v in valores.items()}
-    return _cache[nombre].substitute(seguros)
+def template(name, **values):
+    """Render templates/<name>.html; every value is HTML-escaped."""
+    if name not in _cache:
+        with open(os.path.join(TEMPLATES, f"{name}.html"), encoding="utf-8") as f:
+            _cache[name] = Template(f.read())
+    return _cache[name].substitute({k: html.escape(str(v)) for k, v in values.items()})
 
 
-def pintar(nombre, **valores):
-    st.markdown(plantilla(nombre, **valores), unsafe_allow_html=True)
+def render(name, **values):
+    st.markdown(template(name, **values), unsafe_allow_html=True)
 
 
-def banda(u):
-    for minimo, clase, texto, color in BANDAS:
-        if u >= minimo:
-            return clase, texto, color
-    return BANDAS[-1][1:]
+def cutoffs(con):
+    """(High, Medium) = 90th and 60th percentile of |uncertainty_pct| over ALL cases.
+    abs() keeps reviewed cases (stored as negative) in, so the cut-offs do not move as people review."""
+    u = pd.Series([abs(r[0]) for r in con.execute("SELECT uncertainty_pct FROM casos")], dtype=float)
+    return float(u.quantile(PCT_HIGH)), float(u.quantile(PCT_MEDIUM))
+
+
+def band(u, limits):
+    high, medium = limits
+    key = "alta" if u >= high else "media" if u >= medium else "baja"
+    return (key, *STYLES[key])
 
 
 def fmt(v):
@@ -151,145 +180,146 @@ def fmt(v):
 
 
 # ---------------------------------------------------------------- user interface
-st.set_page_config(page_title="Cashy · Revisión de casos", page_icon=":material/shield_person:", layout="wide")
-cargar_css()
-con = conectar()
+st.set_page_config(page_title="Cashy · Case review", page_icon=":material/shield_person:", layout="wide")
+load_css()
+con = connect()
+LIMITS = cutoffs(con)
 
 with st.sidebar:
-    st.markdown('<span class="cx-side-label">Revisor</span>', unsafe_allow_html=True)
-    revisor = st.text_input("Tu ID (seudónimo, p. ej. CW07)", key="revisor")
-    sede = st.selectbox("Tu sede (OficinaACNUR)", sedes(con), index=None,
-                        placeholder="Escoge tu sede", key="sede")
-    n_pend = n_rev = 0
-    if sede:
-        cond, p = filtro_sede(sede)
-        n_pend = con.execute(f"SELECT COUNT(*) FROM casos WHERE uncertainty_pct > 0 AND {cond}", p).fetchone()[0]
-        n_rev = con.execute(f"SELECT COUNT(*) FROM casos WHERE uncertainty_pct < 0 AND {cond}", p).fetchone()[0]
-    st.markdown('<span class="cx-side-label">Navegación</span>', unsafe_allow_html=True)
-    vista = st.radio("Navegación", ["cola", "revisados"], key="vista", label_visibility="collapsed",
-                     format_func=lambda v: ":material/inbox: Cola de casos" if v == "cola"
-                     else ":material/check_circle: Casos revisados")  # static labels: dynamic ones reset the radio
-    minimo = st.slider("Uncertainty mínima", 0.0, 100.0, 0.0, 0.5, key="minimo")
-    total_sede = n_pend + n_rev
-    pintar("sidebar_footer", pendientes=n_pend if sede else "—",
-           revisados=f"{n_rev} / {total_sede}" if sede else "—")
+    st.markdown('<span class="cx-side-label">Reviewer</span>', unsafe_allow_html=True)
+    office = st.selectbox("UNHCR office", offices(con), index=None,
+                          placeholder="Choose your office", key="sede")
+    workers = caseworkers(con, office) if office else []
+    # one widget key per office, so changing the office never keeps a caseworker from another office
+    reviewer = st.selectbox("Caseworker", workers, index=None, key=f"revisor_{office}", disabled=not workers,
+                            placeholder="Choose your caseworker ID" if workers else
+                            ("No caseworkers assigned to this office" if office else "Choose an office first"))
+    reviewer = reviewer or ""
+    n_pending = n_reviewed = 0
+    if office:
+        cond, p = office_filter(office)
+        n_pending = con.execute(f"SELECT COUNT(*) FROM casos WHERE uncertainty_pct > 0 AND {cond}", p).fetchone()[0]
+        n_reviewed = con.execute(f"SELECT COUNT(*) FROM casos WHERE uncertainty_pct < 0 AND {cond}", p).fetchone()[0]
+    st.markdown('<span class="cx-side-label">Navigation</span>', unsafe_allow_html=True)
+    view = st.radio("Navigation", ["queue", "reviewed"], key="vista", label_visibility="collapsed",
+                    format_func=lambda v: ":material/inbox: Case queue" if v == "queue"
+                    else ":material/check_circle: Reviewed cases")  # static labels: dynamic ones reset the radio
+    max_unc = float(con.execute("SELECT MAX(ABS(uncertainty_pct)) FROM casos").fetchone()[0] or 100)
+    minimum = st.slider("Minimum uncertainty", 0.0, float(-(-max_unc // 1)), 0.0, 0.5, key="minimo")
+    st.caption(f"High ≥ {LIMITS[0]:.1f}% · Medium ≥ {LIMITS[1]:.1f}% (90th and 60th percentile of all cases)")
+    render("sidebar_footer", pendientes=n_pending if office else "—",
+           revisados=f"{n_reviewed} / {n_pending + n_reviewed}" if office else "—")
 
-pintar("topbar", revisor=revisor.strip() or "Sin identificar", sede=sede or "Sin sede")
+render("topbar", revisor=reviewer.strip() or "Not identified", sede=office or "No office selected")
 
-aviso = st.session_state.pop("aviso", None)
-if aviso:
-    st.toast(aviso, icon=":material/check_circle:")
-
-
-@st.dialog("Modificar recomendación", width="large")
-def dialogo_modificar(caso_id, caso):
-    veredicto = "EXCLUSION" if caso[REC] == "INCLUSION" else "INCLUSION"
-    pintar("modal_head", caso_id=caso_id, mes=caso["month"], recomendacion=caso[REC], veredicto=veredicto)
-    st.markdown('<span class="cx-req">CAMPO OBLIGATORIO</span>', unsafe_allow_html=True)
-    nota = st.text_area("Nota: ¿por qué modificas la recomendación?", key="nota_mod", height=120,
-                        placeholder="Explica la razón del cambio con base en los datos del caso…")
-    st.caption("La nota queda guardada en la tabla de revisiones junto con el caso.")
-    c1, c2 = st.columns(2)
-    if c1.button("Cancelar", key="btn_cancelar", width="stretch"):
-        st.rerun()
-    if c2.button("Confirmar modificación", key="btn_confirmar_mod", icon=":material/send:", width="stretch"):
-        if not nota.strip():
-            st.error("La nota es obligatoria cuando modificas el caso.")
-            return
-        try:
-            guardar_revision(caso_id, "Modificado", veredicto, nota, revisor, sede)
-        except ValueError as e:
-            st.error(str(e))
-            return
-        st.session_state["aviso"] = f"Caso {caso_id} modificado: {caso[REC]} → {veredicto}."
-        st.session_state.pop("nota_mod", None)
-        st.session_state.pop("caso_sel", None)
-        st.rerun()
+notice = st.session_state.pop("aviso", None)
+if notice:
+    st.toast(notice, icon=":material/check_circle:")
 
 
-if not sede:
-    st.info("Escoge tu sede en la barra lateral para ver los casos pendientes.", icon=":material/location_on:")
+def decide(case_id, decision):
+    try:
+        save_review(case_id, decision, st.session_state.get("nota", ""), reviewer, office)
+    except ValueError as e:
+        st.error(str(e))
+        return
+    st.session_state["aviso"] = f"Case {case_id} saved: {decision}."
+    st.session_state.pop("caso_sel", None)
+    st.session_state["limpiar_nota"] = True
+    st.rerun()
 
-elif vista == "cola":
-    cola = pendientes(con, minimo, sede)
-    izq, der = st.columns([5, 7], gap="medium")
 
-    with izq:
+if st.session_state.pop("limpiar_nota", False):  # clear the note before the text area is drawn
+    st.session_state["nota"] = ""
+
+if not office:
+    st.info("Choose your office in the sidebar to see the pending cases.", icon=":material/location_on:")
+
+elif view == "queue":
+    queue = pending(con, minimum, office)
+    left, right = st.columns([5, 7], gap="medium")
+
+    with left:
         with st.container(key="panel_cola"):
-            pintar("queue_head", pendientes=len(cola))
-            if cola.empty:
-                st.caption("No hay casos pendientes con ese nivel de uncertainty.")
+            render("queue_head", pendientes=len(queue))
+            if queue.empty:
+                st.caption("No pending cases at this uncertainty level.")
             else:
-                ids = list(cola["caso_id"])
+                ids = list(queue["caso_id"])
                 if st.session_state.get("caso_sel") not in ids:
                     st.session_state["caso_sel"] = ids[0]
-                paginas = max(1, -(-len(ids) // POR_PAGINA))
-                pag = min(st.session_state.get("pag", 0), paginas - 1)
-                for _, fila in cola.iloc[pag * POR_PAGINA:(pag + 1) * POR_PAGINA].iterrows():
-                    cid = fila["caso_id"]
+                pages = max(1, -(-len(ids) // PAGE_SIZE))
+                page = min(st.session_state.get("pag", 0), pages - 1)
+                for _, row in queue.iloc[page * PAGE_SIZE:(page + 1) * PAGE_SIZE].iterrows():
+                    cid = row["caso_id"]
                     sel = cid == st.session_state["caso_sel"]
                     with st.container(key=("qsel_" if sel else "q_") + cid):
-                        pintar("queue_item", sel="sel" if sel else "", caso_id=cid, mes=fila["month"],
-                               nivel=banda(fila["uncertainty_pct"])[0], unc=f"{fila['uncertainty_pct']:.1f}")
-                        if st.button(f"Abrir {cid}", key=f"abrir_{cid}"):
+                        render("queue_item", sel="sel" if sel else "", caso_id=cid, mes=row["month"],
+                               nivel=band(row["uncertainty_pct"], LIMITS)[0], unc=f"{row['uncertainty_pct']:.1f}")
+                        if st.button(f"Open {cid}", key=f"abrir_{cid}"):
                             st.session_state["caso_sel"] = cid
                             st.rerun()
-                if paginas > 1:
+                if pages > 1:
                     with st.container(key="pager"):
                         a, b, c = st.columns([1, 2, 1])
-                        if a.button("", icon=":material/chevron_left:", key="prev", disabled=pag == 0):
-                            st.session_state["pag"] = pag - 1
+                        if a.button("", icon=":material/chevron_left:", key="prev", disabled=page == 0):
+                            st.session_state["pag"] = page - 1
                             st.rerun()
-                        b.caption(f"Página {pag + 1} de {paginas}")
-                        if c.button("", icon=":material/chevron_right:", key="next", disabled=pag >= paginas - 1):
-                            st.session_state["pag"] = pag + 1
+                        b.caption(f"Page {page + 1} of {pages}")
+                        if c.button("", icon=":material/chevron_right:", key="next", disabled=page >= pages - 1):
+                            st.session_state["pag"] = page + 1
                             st.rerun()
 
-    with der:
-        if not cola.empty:
-            caso_id = st.session_state["caso_sel"]
-            caso = cola.set_index("caso_id").loc[caso_id]
-            clase, texto, color = banda(caso["uncertainty_pct"])
+    with right:
+        if not queue.empty:
+            case_id = st.session_state["caso_sel"]
+            case = queue.set_index("caso_id").loc[case_id]
+            key, label, colour = band(case["uncertainty_pct"], LIMITS)
             with st.container(key="panel_caso"):
-                pintar("case", caso_id=caso_id, nivel=clase, nivel_txt=texto, ring=color,
-                       unc=f"{caso['uncertainty_pct']:.1f}", unc_int=f"{caso['uncertainty_pct']:.1f}",
-                       mes=caso["month"], oficina=fmt(caso["OficinaACNUR"]) if sede != SIN_OFICINA else SIN_OFICINA,
-                       recomendacion=caso[REC])
+                render("case", caso_id=case_id, nivel=key, nivel_txt=label, ring=colour,
+                       unc=f"{case['uncertainty_pct']:.1f}", mes=case["month"],
+                       oficina=fmt(case["OficinaACNUR"]) if office != NO_OFFICE else NO_OFFICE,
+                       finalscore=f"{case['FinalScore']:.2f}", ai_rec=fmt(case[AI_REC]).capitalize(),
+                       ai_cls=str(case[AI_REC]).lower())
                 with st.container(key="detalles"):
-                    with st.expander("Ver detalles del caso", icon=":material/description:"):
-                        for titulo, campos in GRUPOS.items():
-                            filas = "".join(f"<tr><td>{html.escape(c)}</td><td>{html.escape(fmt(caso[c]))}</td></tr>"
-                                            for c in campos)
-                            st.markdown(f'<span class="cx-caps">{html.escape(titulo)}</span>'
-                                        f'<table class="cx-details">{filas}</table>', unsafe_allow_html=True)
+                    with st.expander("View case details", icon=":material/description:"):
+                        for title, fields in GROUPS.items():
+                            rows = "".join(f"<tr><td>{html.escape(c)}</td><td>{html.escape(fmt(case[c]))}</td></tr>"
+                                           for c in fields)
+                            st.markdown(f'<span class="cx-caps">{html.escape(title)}</span>'
+                                        f'<table class="cx-details">{rows}</table>', unsafe_allow_html=True)
                 with st.container(key="acciones"):
-                    sin_id = not revisor.strip()
+                    no_id = not reviewer.strip()
+                    st.text_area("Note (optional)", key="nota", height=90,
+                                 placeholder="Why do you include or exclude this household?")
                     c1, c2 = st.columns(2)
                     with c1:
-                        if st.button("Modificar con nota", key="btn_modificar", icon=":material/block:",
-                                     disabled=sin_id, width="stretch"):
-                            dialogo_modificar(caso_id, caso)
+                        if st.button("Exclude", key="btn_exclude", icon=":material/block:",
+                                     disabled=no_id, width="stretch"):
+                            decide(case_id, "EXCLUSION")
                     with c2:
-                        if st.button("Confirmar recomendación", key="btn_confirmar", icon=":material/verified:",
-                                     disabled=sin_id, width="stretch"):
-                            try:
-                                guardar_revision(caso_id, "Confirmado", caso[REC], "", revisor, sede)
-                            except ValueError as e:
-                                st.error(str(e))
-                            else:
-                                st.session_state["aviso"] = f"Caso {caso_id} confirmado ({caso[REC]})."
-                                st.session_state.pop("caso_sel", None)
-                                st.rerun()
-                    if sin_id:
-                        st.caption("Escribe tu ID de revisor en la barra lateral para habilitar las acciones.")
+                        if st.button("Include", key="btn_include", icon=":material/check_circle:",
+                                     disabled=no_id, width="stretch"):
+                            decide(case_id, "INCLUSION")
+                    if no_id:
+                        st.caption("Choose your caseworker ID in the sidebar to enable the decision buttons.")
 
-else:  # revisados
-    cond, p = filtro_sede(sede)
+else:  # reviewed
+    cond, p = office_filter(office)
     rev = pd.read_sql_query(f"SELECT * FROM revisiones WHERE {cond} ORDER BY revision_id DESC", con, params=p)
+    rev["Agreement"] = (rev[BLIND] == rev[RECORDED]).map({True: "Agrees", False: "Disagrees"})
+    n = len(rev)
+    n_dis = int((rev["Agreement"] == "Disagrees").sum())
     with st.container(key="panel_hist"):
-        pintar("kpis", total=len(rev), confirmadas=int((rev["accion"] == "Confirmado").sum()),
-               modificadas=int((rev["accion"] == "Modificado").sum()))
-        st.dataframe(rev, hide_index=True, width="stretch")
-        if len(rev):
-            st.download_button("Descargar revisiones (CSV)", rev.to_csv(index=False).encode("utf-8-sig"),
+        render("kpis", total=n, incluidos=int((rev[BLIND] == "INCLUSION").sum()),
+               excluidos=int((rev[BLIND] == "EXCLUSION").sum()), desacuerdos=n_dis,
+               pct=f"{100 * n_dis / n:.1f}%" if n else "—")
+        only_dis = st.toggle("Show only disagreements (EligibilityTarget2 ≠ EligibilityTarget)", key="solo_desac")
+        shown = rev[rev["Agreement"] == "Disagrees"] if only_dis else rev
+        first = ["revision_id", "caso_id", "fecha_revision", "revisor", "CaseworkerID", "sede_revisor",
+                 "uncertainty_original", "FinalScore", AI_REC, BLIND, RECORDED, "Agreement", "nota"]
+        shown = shown[first + [c for c in shown.columns if c not in first]]
+        st.dataframe(shown, hide_index=True, width="stretch")
+        if n:
+            st.download_button("Download reviews (CSV)", rev.to_csv(index=False).encode("utf-8-sig"),
                                "revisiones.csv", "text/csv", icon=":material/download:")

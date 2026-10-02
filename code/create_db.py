@@ -1,12 +1,13 @@
 """
 Build the SQLite database for the Cashy review app (pipeline steps 2 and 5).
 
-Input : Data/S8.synthetic_cashy_sample.csv AFTER running code/data_parse.py,
-        i.e. with the "Uncertainty %" column added by that script.
+Input : Data/S8.synthetic_cashy_sample.csv AFTER running code/data_parse.py, i.e. with the
+        columns caseID, CaseworkerID, "Uncertainty %" and ai_recomandation added by that script.
 Output: code/cashy.db with two tables
   casos      - one row per household: all S8 columns + caso_id + uncertainty_pct
                ("Uncertainty %" from the CSV, renamed to be SQL-friendly)
-  revisiones - empty; the Streamlit app appends one row per reviewed case
+  revisiones - empty; the Streamlit app appends one row per reviewed case, with the
+               caseworker's blind decision in EligibilityTarget2 (INCLUSION / EXCLUSION)
 
 Convention in `casos`:
   uncertainty_pct > 0  -> pending review
@@ -53,7 +54,10 @@ def main():
                 os.remove(a.db + suffix)
 
     df = df.rename(columns={UNCERTAINTY_COL: "uncertainty_pct"}).reset_index(drop=True)
-    df.insert(0, "caso_id", [f"C{i+1:04d}" for i in range(len(df))])
+    for col in ("caseID", "CaseworkerID", "ai_recomandation"):
+        if col not in df.columns:
+            raise SystemExit(f"'{col}' not found in {a.csv}. Run `python code/data_parse.py` first.")
+    df.insert(0, "caso_id", [f"C{int(i):04d}" for i in df["caseID"]])   # C0001 ... from data_parse's caseID
     df["month"] = df["month"].astype(str)
 
     con = sqlite3.connect(a.db)
@@ -67,8 +71,7 @@ def main():
     ddl = ("CREATE TABLE revisiones (\n  revision_id INTEGER PRIMARY KEY AUTOINCREMENT,\n  "
            + ",\n  ".join(cols)
            + ",\n  uncertainty_original REAL NOT NULL"
-           + ",\n  accion TEXT NOT NULL CHECK (accion IN ('Confirmado','Modificado'))"
-           + ",\n  decision_overriden TEXT NOT NULL CHECK (decision_overriden IN ('INCLUSION','EXCLUSION'))"
+           + ",\n  EligibilityTarget2 TEXT NOT NULL CHECK (EligibilityTarget2 IN ('INCLUSION','EXCLUSION'))"
            + ",\n  nota TEXT"
            + ",\n  revisor TEXT NOT NULL"
            + ",\n  sede_revisor TEXT NOT NULL"

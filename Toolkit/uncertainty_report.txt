@@ -1,0 +1,116 @@
+PROXY MODE: no independent AIRecommendation exists in the repository or supplied CSV.
+The probabilities predict the institution's recorded EligibilityTarget (INCLUSION), not AI error or human override.
+The proxy classifier predicts INCLUSION when P(INCLUSION)>=0.5, otherwise EXCLUSION. proxy_uncertainty=min(P(INCLUSION),1-P(INCLUSION)) estimates the probability that this proxy class differs from the recorded reference. It is not an AI-error probability.
+EligibilityTarget is a recorded reference determination, not objective truth about household need.
+The supplied synthetic sample is not evidence of real-world model performance.
+
+Rows=1900; skipped=0; positive model labels=427; negative model labels=1473; positive rate=0.224737
+AI-correct/AI-wrong counts: unavailable (no independent AIRecommendation).
+Stratified outer folds=5; threshold=0.5
+Confusion matrix (reference inclusion positive): TP=0 FP=0 TN=1473 FN=427
+ROC_AUC=0.633325 PR_AUC=0.298709 LogLoss=0.517452 Brier=0.169159 ECE10=0.0388493
+Calibration is Platt logistic calibration fit from inner out-of-fold training predictions. Metrics are outer-fold predictions.
+
+Largest absolute calibrated model weights (positive raises recorded-INCLUSION log odds):
+month=2023-07 : -0.300948
+month=2024-06 : -0.297733
+month=2024-01 : 0.261771
+ScoreIntenciones=ZERO : -0.238673
+ScoreDuplicidad=ZERO : -0.234767
+month=2023-12 : 0.209019
+month=2024-05 : -0.204857
+month=2024-04 : -0.202205
+Analfabeta_si=adultos_ninguno_analfabeta : -0.199485
+month=2023-06 : -0.1771
+month=2023-11 : 0.145594
+HablaEspanol=espanol_uno_mas_adultos : -0.134893
+ScoreCOMAR_PIL=FLAG_-500 : -0.134818
+CuidadorSolo=si : -0.122893
+month=2024-02 : 0.121632
+OficinaACNUR=sotap : -0.115697
+month=2023-10 : 0.113723
+Demographics.Profiles : 0.097152
+month=2024-03 : 0.0966408
+dependencyCategory=low : -0.0965823
+
+Highest proxy_uncertainty cases (row_id, month, probability of recorded INCLUSION, proxy_uncertainty, anomaly, conflict):
+
+row_id=1487, month=2024-01, P(reference INCLUSION)=0.40398, proxy_uncertainty=0.40398, anomaly=0, conflict=0
+  strongest positive inclusion-log-odds contributions: month=2024-01(0.223743) Demographics.Language(0.203028) Demographics.Profiles(0.161007)
+  strongest negative inclusion-log-odds contributions: ScoreIntenciones=ZERO(-0.234952) ScoreDuplicidad=ZERO(-0.199056) CuidadorSolo=si(-0.148309)
+
+row_id=315, month=2023-11, P(reference INCLUSION)=0.394008, proxy_uncertainty=0.394008, anomaly=0, conflict=0
+  strongest positive inclusion-log-odds contributions: Demographics.Profiles(0.189083) month=2023-11(0.163372) Needs_and_Coping.Housing(0.0901439)
+  strongest negative inclusion-log-odds contributions: ScoreDuplicidad=ZERO(-0.233393) ScoreIntenciones=ZERO(-0.215608) dependencyCategory=low(-0.151856)
+
+row_id=633, month=2024-02, P(reference INCLUSION)=0.389748, proxy_uncertainty=0.389748, anomaly=0, conflict=0
+  strongest positive inclusion-log-odds contributions: Demographics.Profiles(0.189083) month=2024-02(0.171978) Needs_and_Coping.Housing(0.0901439)
+  strongest negative inclusion-log-odds contributions: Analfabeta_si=adultos_ninguno_analfabeta(-0.21977) ScoreIntenciones=ZERO(-0.215608) HablaEspanol=espanol_uno_mas_adultos(-0.13901)
+
+row_id=920, month=2024-02, P(reference INCLUSION)=0.38655, proxy_uncertainty=0.38655, anomaly=0, conflict=1
+  strongest positive inclusion-log-odds contributions: Demographics.Profiles(0.189083) month=2024-02(0.171978) Needs_and_Coping.Housing(0.0901439)
+  strongest negative inclusion-log-odds contributions: ScoreDuplicidad=ZERO(-0.233393) Analfabeta_si=adultos_ninguno_analfabeta(-0.21977) HablaEspanol=espanol_uno_mas_adultos(-0.13901)
+
+row_id=1682, month=2023-11, P(reference INCLUSION)=0.374988, proxy_uncertainty=0.374988, anomaly=0, conflict=0
+  strongest positive inclusion-log-odds contributions: Demographics.Profiles(0.161007) Needs_and_Coping.Housing(0.121528) month=2023-11(0.112558)
+  strongest negative inclusion-log-odds contributions: ScoreIntenciones=ZERO(-0.234952) ScoreDuplicidad=ZERO(-0.199056) HablaEspanol=espanol_uno_mas_adultos(-0.115028)
+
+row_id=1131, month=2024-01, P(reference INCLUSION)=0.37301, proxy_uncertainty=0.37301, anomaly=0, conflict=0
+  strongest positive inclusion-log-odds contributions: month=2024-01(0.25271) Needs_and_Coping.BasicNeeds(0.0890002) Demographics.Profiles(0.0709469)
+  strongest negative inclusion-log-odds contributions: ScoreIntenciones=ZERO(-0.247964) ScoreDuplicidad=ZERO(-0.24255) OficinaACNUR=sotap(-0.110081)
+
+row_id=1161, month=2024-01, P(reference INCLUSION)=0.372834, proxy_uncertainty=0.372834, anomaly=0, conflict=0
+  strongest positive inclusion-log-odds contributions: Demographics.Profiles(0.277119) month=2024-01(0.223743) Needs_and_Coping.Housing(0.121528)
+  strongest negative inclusion-log-odds contributions: ScoreIntenciones=ZERO(-0.234952) ScoreDuplicidad=ZERO(-0.199056) Analfabeta_si=adultos_ninguno_analfabeta(-0.197853)
+
+row_id=984, month=2024-01, P(reference INCLUSION)=0.369363, proxy_uncertainty=0.369363, anomaly=0, conflict=0
+  strongest positive inclusion-log-odds contributions: month=2024-01(0.321996) Demographics.Profiles(0.077514) Needs_and_Coping.Housing(0.0627624)
+  strongest negative inclusion-log-odds contributions: ScoreIntenciones=ZERO(-0.23046) ScoreDuplicidad=ZERO(-0.226508) HablaEspanol=espanol_uno_mas_adultos(-0.163172)
+
+row_id=500, month=2024-01, P(reference INCLUSION)=0.368102, proxy_uncertainty=0.368102, anomaly=0, conflict=0
+  strongest positive inclusion-log-odds contributions: month=2024-01(0.321996) Needs_and_Coping.Housing(0.0627624) Needs_and_Coping.BasicNeeds(0.0392778)
+  strongest negative inclusion-log-odds contributions: ScoreIntenciones=ZERO(-0.23046) ScoreDuplicidad=ZERO(-0.226508) OficinaACNUR=sotap(-0.0990931)
+
+row_id=1363, month=2023-10, P(reference INCLUSION)=0.367332, proxy_uncertainty=0.367332, anomaly=0, conflict=0
+  strongest positive inclusion-log-odds contributions: Demographics.Profiles(0.161007) Needs_and_Coping.Housing(0.121528) month=2023-10(0.118694)
+  strongest negative inclusion-log-odds contributions: ScoreIntenciones=ZERO(-0.234952) ScoreDuplicidad=ZERO(-0.199056) OficinaACNUR=sotap(-0.129433)
+
+row_id=441, month=2024-01, P(reference INCLUSION)=0.363922, proxy_uncertainty=0.363922, anomaly=0, conflict=0
+  strongest positive inclusion-log-odds contributions: month=2024-01(0.266362) Demographics.Profiles(0.0925309) Needs_and_Coping.Housing(0.0872703)
+  strongest negative inclusion-log-odds contributions: ScoreDuplicidad=ZERO(-0.238335) ScoreIntenciones=ZERO(-0.229881) OficinaACNUR=sotap(-0.130173)
+
+row_id=680, month=2023-12, P(reference INCLUSION)=0.362749, proxy_uncertainty=0.362749, anomaly=0, conflict=0
+  strongest positive inclusion-log-odds contributions: month=2023-12(0.211681) Demographics.Profiles(0.109858) Needs_and_Coping.Housing(0.0901439)
+  strongest negative inclusion-log-odds contributions: ScoreDuplicidad=ZERO(-0.233393) Analfabeta_si=adultos_ninguno_analfabeta(-0.21977) ScoreIntenciones=ZERO(-0.215608)
+
+row_id=1726, month=2024-01, P(reference INCLUSION)=0.361961, proxy_uncertainty=0.361961, anomaly=0, conflict=0
+  strongest positive inclusion-log-odds contributions: Demographics.Profiles(0.277119) month=2024-01(0.223743) Needs_and_Coping.Housing(0.121528)
+  strongest negative inclusion-log-odds contributions: ScoreIntenciones=ZERO(-0.234952) ScoreDuplicidad=ZERO(-0.199056) Analfabeta_si=adultos_ninguno_analfabeta(-0.197853)
+
+row_id=465, month=2024-01, P(reference INCLUSION)=0.360988, proxy_uncertainty=0.360988, anomaly=0, conflict=0
+  strongest positive inclusion-log-odds contributions: Demographics.Documentation(0.338924) month=2024-01(0.25271) Needs_and_Coping.BasicNeeds(0.0890002)
+  strongest negative inclusion-log-odds contributions: ScoreIntenciones=ZERO(-0.247964) ScoreDuplicidad=ZERO(-0.24255) Analfabeta_si=adultos_ninguno_analfabeta(-0.198342)
+
+row_id=304, month=2024-01, P(reference INCLUSION)=0.360694, proxy_uncertainty=0.360694, anomaly=1, conflict=0
+  strongest positive inclusion-log-odds contributions: month=2024-01(0.321996) Demographics.Profiles(0.133414) Needs_and_Coping.BasicNeeds(0.0392778)
+  strongest negative inclusion-log-odds contributions: ScoreIntenciones=ZERO(-0.23046) ScoreDuplicidad=ZERO(-0.226508) HablaEspanol=espanol_uno_mas_adultos(-0.163172)
+
+row_id=773, month=2023-12, P(reference INCLUSION)=0.360405, proxy_uncertainty=0.360405, anomaly=0, conflict=0
+  strongest positive inclusion-log-odds contributions: month=2023-12(0.211681) Demographics.Profiles(0.109858) Needs_and_Coping.Housing(0.0901439)
+  strongest negative inclusion-log-odds contributions: ScoreDuplicidad=ZERO(-0.233393) ScoreIntenciones=ZERO(-0.215608) dependencyCategory=low(-0.151856)
+
+row_id=1826, month=2023-11, P(reference INCLUSION)=0.360261, proxy_uncertainty=0.360261, anomaly=0, conflict=0
+  strongest positive inclusion-log-odds contributions: month=2023-11(0.163372) Demographics.Profiles(0.109858) Needs_and_Coping.Housing(0.0901439)
+  strongest negative inclusion-log-odds contributions: ScoreDuplicidad=ZERO(-0.233393) ScoreIntenciones=ZERO(-0.215608) HablaEspanol=espanol_uno_mas_adultos(-0.13901)
+
+row_id=71, month=2024-01, P(reference INCLUSION)=0.36005, proxy_uncertainty=0.36005, anomaly=0, conflict=0
+  strongest positive inclusion-log-odds contributions: month=2024-01(0.266362) Demographics.Profiles(0.0925309) Needs_and_Coping.Housing(0.0872703)
+  strongest negative inclusion-log-odds contributions: ScoreDuplicidad=ZERO(-0.238335) Analfabeta_si=adultos_ninguno_analfabeta(-0.171287) CuidadorSolo=si(-0.146911)
+
+row_id=236, month=2024-01, P(reference INCLUSION)=0.359789, proxy_uncertainty=0.359789, anomaly=0, conflict=0
+  strongest positive inclusion-log-odds contributions: month=2024-01(0.266362) Needs_and_Coping.Housing(0.0872703) Demographics.HH.Head(0.0784038)
+  strongest negative inclusion-log-odds contributions: ScoreDuplicidad=ZERO(-0.238335) ScoreIntenciones=ZERO(-0.229881) HablaEspanol=espanol_uno_mas_adultos(-0.102906)
+
+row_id=922, month=2024-02, P(reference INCLUSION)=0.35951, proxy_uncertainty=0.35951, anomaly=0, conflict=0
+  strongest positive inclusion-log-odds contributions: month=2024-02(0.171978) Demographics.Profiles(0.109858) Needs_and_Coping.BasicNeeds(0.0614453)
+  strongest negative inclusion-log-odds contributions: ScoreDuplicidad=ZERO(-0.233393) ScoreIntenciones=ZERO(-0.215608) HablaEspanol=espanol_uno_mas_adultos(-0.13901)
