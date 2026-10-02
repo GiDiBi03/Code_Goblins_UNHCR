@@ -41,8 +41,6 @@ def assign_caseworker(office):
 # 3. Generate the values and insert as the second column (index 1)
 """caseworker_col = data['OficinaACNUR'].apply(assign_caseworker)
 data.insert(1, 'CaseworkerID', caseworker_col)"""
-print(data['OficinaACNUR'].unique())
-print(data['CaseworkerID'].unique())
 
 # save AFTER all columns have been created
 data.to_csv('Data/S8.synthetic_cashy_sample.csv', index=False)
