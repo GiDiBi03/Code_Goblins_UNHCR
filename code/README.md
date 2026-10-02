@@ -77,17 +77,46 @@ The colour bands are percentiles of all cases, not fixed values, so they keep wo
 The cut-offs are computed from `|uncertainty_pct|` over all cases, so they do not move as cases get reviewed. They are shown under the slider in the sidebar. To change them, edit `PCT_HIGH` / `PCT_MEDIUM` at the top of `app.py`.
 
 ## Connecting Power BI
-See `PowerBI/Guia_Dashboards_CachyBI.html`. In short: Get data → Python script:
+The `.pbix` must not contain anyone's local path (the repo is public, and it has to work on every teammate's computer). Power BI cannot use a path relative to the `.pbix`, so the database location comes from the environment variable **`CASHY_DB`**. The Streamlit app reads the same variable (if it is not set, the app falls back to `code/cashy.db` next to `app.py`).
 
-```python
-import sqlite3, pandas as pd
-con = sqlite3.connect(r"C:\path\to\repo\code\cashy.db")
-revisiones = pd.read_sql_query("SELECT * FROM revisiones", con)
-casos = pd.read_sql_query("SELECT * FROM casos", con)
-con.close()
-```
+### 1. Set `CASHY_DB` once per computer
+Use the full path to `code/cashy.db` inside **your** copy of the repo.
+
+- **Windows** (PowerShell or Command Prompt):
+  ```
+  setx CASHY_DB "C:\path\to\Code_Goblins_UNHCR\code\cashy.db"
+  ```
+  `setx` saves it permanently for your user, but only programs opened **afterwards** see it.
+- **macOS / Linux**: add this line to `~/.zshrc` (macOS) or `~/.bashrc` (Linux), then open a new terminal:
+  ```
+  export CASHY_DB="/path/to/Code_Goblins_UNHCR/code/cashy.db"
+  ```
+
+Check it in a **new** terminal: `echo %CASHY_DB%` (Command Prompt), `$env:CASHY_DB` (PowerShell) or `echo $CASHY_DB` (macOS / Linux).
+
+### 2. Restart Power BI
+Close Power BI Desktop completely and open it again, so it picks up the new variable.
+
+### 3. Point the queries at the variable (only needed once, then commit the `.pbix`)
+1. Open `PowerBI/CachyBI.pbix` → **Home → Transform data**.
+2. In the Queries pane, select the `casos` query → in **Applied Steps**, click **Source** → replace the formula in the formula bar with:
+   ```
+   = Python.Execute("import os, sqlite3, pandas as pd#(lf)db = os.environ.get(""CASHY_DB"", """")#(lf)if not os.path.isfile(db): raise FileNotFoundError(""Set the CASHY_DB environment variable to the full path of code/cashy.db"")#(lf)con = sqlite3.connect(db)#(lf)revisiones = pd.read_sql_query(""SELECT * FROM revisiones"", con)#(lf)casos = pd.read_sql_query(""SELECT * FROM casos"", con)#(lf)con.close()")
+   ```
+   (If the formula bar is hidden: **View → Formula Bar**.) Leave the next step (Navigation) as it is.
+3. Do the same for the `revisiones` query.
+4. If Power BI asks about privacy levels or permission to run the script, accept.
+5. **Home → Close & Apply**, then **Refresh**, then save the `.pbix`.
+
+Once the `.pbix` with this formula is committed, teammates only need steps 1 and 2.
+
+### Troubleshooting
+- **`FileNotFoundError: Set the CASHY_DB environment variable...`**: the variable is missing or points to a file that doesn't exist. Check the path, make sure you ran `python code/create_db.py --reset`, and restart Power BI.
+- **Python script errors**: Power BI uses the Python set in **File → Options and settings → Options → Python scripting**; that Python needs `pandas` installed.
 
 The database runs in WAL mode, so you can Refresh in Power BI while the app is open. Keep the repository out of Dropbox/OneDrive while the app is running, because syncing a live SQLite file can create conflicted copies.
+
+**Git history:** older commits of `CachyBI.pbix` and `Guia_Dashboards_CachyBI.html` still contain the old personal path. Changing the current files doesn't remove it from history; that needs a history rewrite (e.g. `git filter-repo`) and a force push.
 
 ## Notes
 - The data is synthetic (S8). The uncertainty is a proxy model of `EligibilityTarget`, not the probability that an AI is wrong (see `Toolkit/README.md`).

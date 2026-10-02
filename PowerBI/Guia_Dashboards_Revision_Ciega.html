@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboards General y Reviews (revisión ciega) — CachyBI</title>
+<style>
+/* GQ Strategy & Corporate Finance — hoja de estilo canónica de guías HTML.
+   Paleta oficial de company-brand. No introducir colores fuera de :root. */
+:root{
+  --gq-orange:#F15B2B;   /* acento primario: reglas, numeración, cajas "por qué" */
+  --gq-dark:#232425;     /* texto y fondos oscuros */
+  --gq-gray:#F4F4F4;     /* paneles y zebra */
+  --gq-navy:#1F4E79;     /* encabezados de tabla */
+  --gq-teal:#156082;     /* acento de apoyo */
+  --gq-green:#8DC63F;    /* acento secundario: cajas de verificación */
+  --ok:#196B24;          /* semáforo verde / progreso */
+  --alert:#C00000;       /* semáforo rojo / advertencias duras */
+  --warnyellow:#B8960C;  /* semáforo amarillo */
+  --border:#DDDDDD;
+  --muted:#7A7A7A;
+}
+*{box-sizing:border-box}
+body{
+  font-family:Aptos,Calibri,-apple-system,"Segoe UI",sans-serif;
+  color:var(--gq-dark);line-height:1.55;margin:0;background:#fff;font-size:15px;
+}
+
+/* ---------- Portada ---------- */
+header.cover{background:var(--gq-dark);color:#fff;padding:44px 32px 38px}
+header.cover .inner{max-width:960px;margin:0 auto}
+header.cover .eyebrow{
+  color:var(--gq-orange);font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+  font-weight:700;margin:0 0 12px;
+}
+header.cover h1{font-size:31px;font-weight:700;margin:0 0 10px;line-height:1.2}
+header.cover p.sub{margin:0;color:#C9C9C9;font-size:15px;max-width:680px}
+header.cover p.meta{margin:14px 0 0;color:#9A9A9A;font-size:12.5px}
+.accent-bar{height:5px;background:var(--gq-orange)}
+
+/* ---------- Barra de progreso (solo tipo tecnica) ---------- */
+#progress{
+  position:sticky;top:0;background:#fff;border-bottom:1px solid var(--border);
+  padding:10px 32px;z-index:20;display:flex;align-items:center;gap:14px;font-size:13px;
+}
+#progress .inner{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:14px;width:100%}
+#bar{flex:1;height:10px;background:var(--gq-gray);border-radius:5px;overflow:hidden}
+#fill{height:100%;width:0;background:var(--ok);transition:width .3s}
+#progress .cuenta{white-space:nowrap;font-variant-numeric:tabular-nums}
+#progress button{
+  background:none;border:1px solid var(--border);border-radius:4px;color:var(--muted);
+  font-size:11.5px;padding:3px 10px;cursor:pointer;white-space:nowrap;
+}
+#progress button:hover{border-color:var(--gq-orange);color:var(--gq-orange)}
+
+.wrap{max-width:960px;margin:0 auto;padding:0 32px 80px}
+.lead{
+  background:var(--gq-gray);border-left:4px solid var(--gq-teal);
+  padding:14px 18px;margin:22px 0 8px;font-size:14px;
+}
+.lead strong{font-weight:700}
+
+/* ---------- Secciones / fases ---------- */
+.fase{border:1px solid var(--border);border-radius:6px;margin:22px 0;overflow:hidden;background:#fff}
+.fase>h2{
+  background:var(--gq-dark);color:#fff;margin:0;padding:12px 20px;font-size:16px;font-weight:700;
+  cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;border:none;
+}
+.fase>h2 .num{color:var(--gq-orange);margin-right:8px}
+.fase>h2 .tiempo{font-weight:400;opacity:.75;font-size:12.5px;white-space:nowrap}
+.fase>h2::after{content:"−";opacity:.6;font-size:15px;margin-left:4px}
+.fase.cerrada>h2::after{content:"+"}
+.fase>.cuerpo{padding:10px 20px 18px}
+
+/* Sección plana (tipos usuario / instructivo) */
+h2.sec{
+  font-size:20px;font-weight:700;margin:42px 0 4px;padding-bottom:8px;
+  border-bottom:2px solid var(--gq-orange);display:flex;align-items:baseline;gap:0;
+}
+h2.sec .num{color:var(--gq-orange);margin-right:8px}
+h3{font-size:16px;font-weight:700;margin:24px 0 8px}
+p{margin:10px 0}
+
+/* ---------- Pasos con checkbox ---------- */
+.paso{border-bottom:1px solid var(--gq-gray);padding:14px 0}
+.paso:last-child{border-bottom:none}
+.paso>label{display:flex;gap:10px;align-items:flex-start;cursor:pointer;font-weight:600;font-size:15px}
+.paso input[type=checkbox]{width:18px;height:18px;margin-top:2px;accent-color:var(--ok);flex-shrink:0}
+.paso.done>label{color:#999;text-decoration:line-through}
+.detalle{margin:8px 0 0 28px;font-size:14px}
+
+/* ---------- Cajas ---------- */
+.porque,.alerta,.check,.nota,.decir{padding:10px 14px;margin:10px 0;font-size:13.5px}
+.porque .title,.alerta .title,.nota .title{display:block;margin-bottom:3px}
+.porque{background:#FDF3EF;border-left:4px solid var(--gq-orange)}
+.porque b,.porque .title{color:var(--gq-orange);font-weight:700}
+.alerta{background:#FBEAEA;border-left:4px solid var(--alert)}
+.alerta b,.alerta .title{color:var(--alert);font-weight:700}
+.check{background:var(--gq-gray);border-left:4px solid var(--gq-green)}
+.check .title{font-weight:700;display:block;margin-bottom:5px}
+.check ul{margin:4px 0 0;padding-left:18px}
+.nota{background:var(--gq-gray);border-left:4px solid var(--gq-teal)}
+.nota b,.nota .title{color:var(--gq-teal);font-weight:700}
+.decir{background:#fff;border:1px dashed var(--gq-orange)}
+.decir .tag{
+  display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--gq-orange);font-weight:700;margin-bottom:4px;
+}
+.decir em{font-style:normal;font-weight:600}
+.donde{font-size:13px;color:#666;margin:8px 0}
+.donde b{color:var(--gq-dark)}
+.donde code,code{
+  font-family:"SF Mono",Consolas,Monaco,monospace;background:var(--gq-gray);
+  padding:2px 6px;border-radius:3px;font-size:12.5px;color:var(--gq-navy);word-break:break-word;
+}
+.path{
+  display:inline-block;font-family:"SF Mono",Consolas,Monaco,monospace;font-size:12.5px;
+  background:#fff;border:1px solid var(--border);border-left:3px solid var(--gq-orange);
+  padding:4px 10px;margin:4px 0;color:var(--gq-dark);
+}
+
+/* ---------- Código copiable ---------- */
+pre{
+  background:#1e2528;color:#d8e0e4;padding:14px 14px;border-radius:6px;font-size:12.5px;
+  overflow-x:auto;position:relative;margin:10px 0;white-space:pre;
+  font-family:"SF Mono",Consolas,Monaco,monospace;line-height:1.45;
+}
+pre .copy{
+  position:absolute;top:8px;right:8px;background:var(--gq-orange);color:#fff;border:none;
+  border-radius:4px;padding:4px 10px;font-size:11px;cursor:pointer;font-family:inherit;
+}
+pre .copy:active{background:var(--ok)}
+
+/* ---------- Tablas ---------- */
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px}
+th{background:var(--gq-navy);color:#fff;text-align:left;padding:9px 12px;font-weight:700;font-size:13px}
+td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+tbody tr:nth-child(even){background:var(--gq-gray)}
+table.semaforo td:first-child{white-space:nowrap;font-weight:700}
+ol,ul{margin:8px 0 8px 20px;padding:0}
+li{margin:4px 0}
+
+/* ---------- Pasos numerados (instructivo) ---------- */
+ol.steps{counter-reset:step;list-style:none;padding:0;margin:18px 0}
+ol.steps>li{counter-increment:step;position:relative;padding:0 0 18px 46px;margin:0}
+ol.steps>li::before{
+  content:counter(step);position:absolute;left:0;top:0;width:30px;height:30px;
+  background:var(--gq-orange);color:#fff;border-radius:50%;display:flex;
+  align-items:center;justify-content:center;font-weight:700;font-size:14px;
+}
+ol.steps>li strong{display:block;margin-bottom:3px}
+
+/* ---------- Cintillos y KPIs ---------- */
+.pill{
+  display:inline-block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  padding:3px 9px;border-radius:11px;background:var(--gq-teal);color:#fff;vertical-align:middle;margin-left:8px;
+}
+.pill.mensual{background:var(--gq-navy)}
+.pill.eventual{background:#8A8A8A}
+.pill.aud{background:var(--gq-orange)}
+.flujo{
+  display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--gq-dark);color:#fff;
+  padding:16px 20px;margin:20px 0;font-size:14px;
+}
+.flujo .box{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);padding:7px 13px}
+.flujo .arrow{color:var(--gq-orange);font-weight:700;font-size:17px}
+.kpis{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0}
+.kpi{
+  flex:1;min-width:150px;background:#fff;border:1px solid var(--border);
+  border-left:4px solid var(--gq-teal);border-radius:4px;padding:12px 14px;
+}
+.kpi .n{font-size:24px;font-weight:700;color:var(--gq-dark)}
+.kpi .l{font-size:12px;color:var(--muted);margin-top:2px}
+
+footer{
+  max-width:960px;margin:0 auto;padding:18px 32px 60px;margin-top:40px;
+  border-top:1px solid var(--border);font-size:12px;color:var(--muted);
+}
+footer strong{color:var(--gq-dark)}
+
+@media print{
+  #progress{position:static}
+  .fase>h2{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  pre .copy{display:none}
+  .fase.cerrada>.cuerpo{display:block !important}
+}
+
+</style></head><body>
+<header class="cover"><div class="inner">
+<p class="eyebrow">Cashy Oversight Challenge · Code Goblins</p>
+<h1>Dashboards General y Reviews (revisión ciega) — CachyBI</h1>
+<p class="sub">Guía paso a paso para actualizar el modelo de Power BI a la revisión ciega (EligibilityTarget2) y a las columnas nuevas (caseID, CaseworkerID, ai_recomandation), y construir las páginas General y Reviews.</p>
+<p class="meta">Sobre CachyBI.pbit (versión con EligibilityTarget2) · datos S8 sintéticos, 1,900 casos · uncertainty de uncertain_Toolkit.py</p>
+</div></header><div class="accent-bar"></div>
+<div id="progress"><div class="inner"><span class="cuenta"><b id="hechos">0</b> / <b id="totalpasos">0</b> pasos</span><div id="bar"><div id="fill"></div></div><button id="reset" type="button">Reiniciar</button></div></div>
+<div class="wrap">
+<div class="lead"><strong>Cómo leer esto.</strong> La Fase 1 va primero: hoy el modelo tiene medidas rotas que usan la columna <code>accion</code>, que ya no existe. Cada paso trae para qué sirve, la ruta de clics y un valor esperado. Los títulos de los visuales van en inglés. Todo el código usa los nombres reales de tu modelo.</div>
+<section class="fase"><h2><span>Antes de empezar</span></h2><div class="cuerpo"><p>La guía está escrita sobre tu <code>CachyBI.pbit</code> actual: tablas <code>casos</code>, <code>revisiones</code>, <code>Cashy</code> (el append de ambas, sin duplicados) y <code>Calendar</code>. Las columnas nuevas que ya trae el modelo son <code>caseID</code>, <code>CaseworkerID</code>, <code>ai_recomandation</code> (low / medium / high) y <code>EligibilityTarget2</code>, que es la decisión ciega del caseworker.</p>
+<table><thead><tr><th>Página</th><th>Tabla base</th><th>Pregunta que responde</th></tr></thead><tbody><tr><td>General</td><td>Cashy</td><td>¿Cómo son los casos, qué dice Cashy (FinalScore, AI recommendation, uncertainty) y cómo va la carga de revisión?</td></tr><tr><td>Reviews</td><td>revisiones</td><td>Cuando el caseworker decide a ciegas, ¿cuánto difiere de la decisión registrada, y dónde?</td></tr></tbody></table>
+<table><thead><tr><th>Término</th><th>Significado</th></tr></thead><tbody><tr><td>FinalScore</td><td>Puntaje de Cashy</td></tr><tr><td>AI Recommendation</td><td>Tercil del FinalScore (Low / Medium / High), calculado en <code>data_parse.py</code></td></tr><tr><td>EligibilityTarget</td><td>Decisión final registrada por la operación</td></tr><tr><td>EligibilityTarget2</td><td>Decisión ciega del caseworker en la app (no vio EligibilityTarget)</td></tr><tr><td>Disagreement with recorded decision</td><td>EligibilityTarget2 ≠ EligibilityTarget</td></tr></tbody></table>
+<div class="alerta"><b>Lo que hoy está roto:</b> <b>Confirmed Reviews</b>, <b>Modified Reviews</b>, <b>Override Rate</b> y <b>Avg Uncertainty Modified</b> usan <code>revisiones[accion]</code>, que ya no existe. Por eso la tarjeta de la página <b>Overwrites</b> da error. La Fase 1 las elimina y la Fase 3 las reemplaza.</div>
+<div class="nota"><b>Antes de editar:</b> guarda una copia del .pbix. Vas a reemplazar el código de dos consultas: tu código actual se conserva tal cual y solo se agregan pasos al final.</div></div></section>
+<section class="fase"><h2><span><span class="num">2</span>FASE 1 — Ajustar el modelo</span><span class="tiempo">~20 min · empezar por aquí</span></h2><div class="cuerpo"><div class="paso"><label><input type="checkbox" id="p2_1"><span>Eliminar las 4 medidas que dependen de accion</span></label><div class="detalle"><div class="porque"><b>Por qué:</b> la columna <code>accion</code> se quitó al pasar a la revisión ciega. Las medidas que la usan dan error y rompen cualquier visual donde estén.</div>
+<div class="donde"><b>Dónde:</b> Panel Datos → tabla <code>revisiones</code> → clic derecho en cada medida → Eliminar del modelo: <b>Confirmed Reviews</b>, <b>Modified Reviews</b>, <b>Override Rate</b> y <b>Avg Uncertainty Modified</b>. <b>Avg Uncertainty Reviewed</b> se queda, porque sigue siendo válida.</div>
+<div class="check"><span class="title">Verificación</span>en <code>revisiones</code> quedan solo dos medidas: <b>Count Revisiones</b> y <b>Avg Uncertainty Reviewed</b>, ninguna con ícono de error.</div></div></div>
+<div class="paso"><label><input type="checkbox" id="p2_2"><span>revisiones: agregar Agreement, dirección del desacuerdo y AI Recommendation</span></label><div class="detalle"><div class="porque"><b>Por qué:</b> la métrica central de la página Reviews es la comparación entre la decisión ciega (<code>EligibilityTarget2</code>) y la registrada (<code>EligibilityTarget</code>). Si la calculas una vez en Power Query, la usan los segmentadores, las leyendas y las medidas. <b>Disagreement Direction</b> separa los dos tipos de error: un caso registrado como INCLUSION que el caseworker excluiría deja a un hogar elegible sin asistencia.</div>
+<div class="donde"><b>Dónde:</b> Inicio → Transformar datos → panel Consultas → clic derecho en <code>revisiones</code> → Editor avanzado → Ctrl+A → pega → Listo.</div>
+<pre><button class="copy" type="button">Copiar</button>let
+    Source = Python.Execute("import os, sqlite3, pandas as pd#(lf)db = os.environ.get(""CASHY_DB"", """")#(lf)if not os.path.isfile(db): raise FileNotFoundError(""Set the CASHY_DB environment variable to the full path of code/cashy.db"")#(lf)con = sqlite3.connect(db)#(lf)revisiones = pd.read_sql_query(""SELECT * FROM revisiones"", con)#(lf)casos = pd.read_sql_query(""SELECT * FROM casos"", con)#(lf)con.close()"),
+    revisiones1 = Source{[Name="revisiones"]}[Value],
+    #"Changed Type" = Table.TransformColumnTypes(revisiones1,{{"month", type date}, {"fecha_revision", type datetime}}),
+    #"Capitalized Each Word" = Table.TransformColumns(#"Changed Type",{{"revisor", Text.Proper, type text}}),
+    #"Numeric Types" = Table.TransformColumnTypes(#"Capitalized Each Word", {{"uncertainty_original", type number}, {"FinalScore", type number}, {"NumIntegrantes", Int64.Type}}, "en-US"),
+    #"Translated Vulnerability" = Table.TransformColumns(#"Numeric Types", {{"Vulnerability_Category", each if _ = null then null else Record.FieldOrDefault([#"Vulnerabilidad Baja" = "Low", #"Vulnerabilidad Moderada" = "Moderate", #"Vulnerabilidad Elevada" = "Elevated", #"Vulnerabilidad Severa" = "Severe"], _, _), type text}}),
+    #"Added Agreement" = Table.AddColumn(#"Translated Vulnerability", "Agreement", each if [EligibilityTarget2] = [EligibilityTarget] then "Agrees" else "Disagrees", type text),
+    #"Added Disagreement Direction" = Table.AddColumn(#"Added Agreement", "Disagreement Direction", each if [EligibilityTarget2] = [EligibilityTarget] then "No disagreement" else "Recorded " &amp; [EligibilityTarget] &amp; " → Blind " &amp; [EligibilityTarget2], type text),
+    #"Added AI Recommendation" = Table.AddColumn(#"Added Disagreement Direction", "AI Recommendation", each if [ai_recomandation] = null then null else Text.Proper([ai_recomandation]), type text),
+    #"Added AI Sort" = Table.AddColumn(#"Added AI Recommendation", "AI Sort", each if [ai_recomandation] = "low" then 1 else if [ai_recomandation] = "medium" then 2 else if [ai_recomandation] = "high" then 3 else null, Int64.Type),
+    #"Added Review Date" = Table.AddColumn(#"Added AI Sort", "Review Date", each DateTime.Date([fecha_revision]), type date)
+in
+    #"Added Review Date"</pre>
+<div class="check"><span class="title">Verificación</span><ul><li><code>Agreement</code> solo tiene Agrees y Disagrees.</li><li><code>Disagreement Direction</code> dice "No disagreement" o "Recorded INCLUSION → Blind EXCLUSION" / "Recorded EXCLUSION → Blind INCLUSION".</li><li><code>AI Recommendation</code> muestra Low / Medium / High.</li></ul></div></div></div>
+<div class="paso"><label><input type="checkbox" id="p2_3"><span>Cashy: agregar Uncertainty, Status y AI Recommendation</span></label><div class="detalle"><div class="porque"><b>Por qué:</b> en <code>Cashy</code>, los pendientes tienen la uncertainty en <code>uncertainty_pct</code> y los revisados en <code>uncertainty_original</code> (vienen de <code>revisiones</code>). Una sola columna <b>Uncertainty</b> permite promediar y graficar los 1,900 casos juntos. <b>Status</b> (Pending / Reviewed) sirve como leyenda en los gráficos.</div>
+<div class="donde"><b>Dónde:</b> Inicio → Transformar datos → panel Consultas → clic derecho en <code>Cashy</code> → Editor avanzado → Ctrl+A → pega → Listo.</div>
+<pre><button class="copy" type="button">Copiar</button>let
+    Source = Table.Combine({casos, revisiones}),
+    #"Renamed Columns" = Table.RenameColumns(Source,{{"FemaleHeadedHousehold", "Household Head Gender"}}),
+    #"Replaced Value" = Table.ReplaceValue(#"Renamed Columns","jefatura_femenina","Female Head",Replacer.ReplaceText,{"Household Head Gender"}),
+    #"Replaced Value1" = Table.ReplaceValue(#"Replaced Value","jefatura_masculina","Male Head",Replacer.ReplaceText,{"Household Head Gender"}),
+    #"Replaced Value2" = Table.ReplaceValue(#"Replaced Value1","","Unspecified",Replacer.ReplaceValue,{"Household Head Gender"}),
+    #"Renamed Columns1" = Table.RenameColumns(#"Replaced Value2",{{"CuidadorSolo", "Solo Caretaker"}}),
+    #"Replaced Value3" = Table.ReplaceValue(#"Renamed Columns1","no","No",Replacer.ReplaceText,{"Solo Caretaker"}),
+    #"Replaced Value4" = Table.ReplaceValue(#"Replaced Value3","si","Si",Replacer.ReplaceText,{"Solo Caretaker"}),
+    #"Replaced Value5" = Table.ReplaceValue(#"Replaced Value4","","Unspecified",Replacer.ReplaceValue,{"Solo Caretaker"}),
+    #"Renamed Columns2" = Table.RenameColumns(#"Replaced Value5",{{"HablaEspanol", "Spanish Speaking"}}),
+    #"Replaced Value6" = Table.ReplaceValue(#"Renamed Columns2","espanol_uno_mas_adultos","One or more Adults",Replacer.ReplaceText,{"Spanish Speaking"}),
+    #"Replaced Value7" = Table.ReplaceValue(#"Replaced Value6","espanol_ningun_adulto","None",Replacer.ReplaceText,{"Spanish Speaking"}),
+    #"Renamed Columns3" = Table.RenameColumns(#"Replaced Value7",{{"Analfabeta_si", "Illiteracy"}}),
+    #"Replaced Value8" = Table.ReplaceValue(#"Renamed Columns3","adultos_ninguno_analfabeta","No Illiteracy",Replacer.ReplaceText,{"Illiteracy"}),
+    #"Replaced Value9" = Table.ReplaceValue(#"Replaced Value8","adultos_uno_mas_analfabeta","One or More Iliterate",Replacer.ReplaceText,{"Illiteracy"}),
+    #"Replaced Value10" = Table.ReplaceValue(#"Replaced Value9","No Elegible por Duplicidad","Ineligible due to Duplicate",Replacer.ReplaceText,{"Elegibilidad"}),
+    #"Replaced Value11" = Table.ReplaceValue(#"Replaced Value10","Lista de Reserva","Waiting List",Replacer.ReplaceText,{"Elegibilidad"}),
+    #"Replaced Value12" = Table.ReplaceValue(#"Replaced Value11","No Elegible","Ineligible",Replacer.ReplaceText,{"Elegibilidad"}),
+    #"Replaced Value13" = Table.ReplaceValue(#"Replaced Value12","Ineligible por Intenciones","Ineligible due to Intentions",Replacer.ReplaceText,{"Elegibilidad"}),
+    #"Replaced Value14" = Table.ReplaceValue(#"Replaced Value13","Elegible por Proceso Acelerado","Eligible for Fastrack",Replacer.ReplaceText,{"Elegibilidad"}),
+    #"Renamed Columns4" = Table.RenameColumns(#"Replaced Value14",{{"Vulnerability_Category", "Vulnerability"}}),
+    #"Replaced Value15" = Table.ReplaceValue(#"Renamed Columns4","Vulnerabilidad Baja","Low",Replacer.ReplaceText,{"Vulnerability"}),
+    #"Replaced Value16" = Table.ReplaceValue(#"Replaced Value15","Vulnerabilidad Moderada","Moderate",Replacer.ReplaceText,{"Vulnerability"}),
+    #"Replaced Value17" = Table.ReplaceValue(#"Replaced Value16","Vulnerabilidad Severa","Severe",Replacer.ReplaceText,{"Vulnerability"}),
+    #"Replaced Value18" = Table.ReplaceValue(#"Replaced Value17","Vulnerabilidad Elevada","Elevated",Replacer.ReplaceText,{"Vulnerability"}),
+    #"Capitalized Each Word" = Table.TransformColumns(#"Replaced Value18",{{"OficinaACNUR", Text.Proper, type text}, {"dependencyCategory", Text.Proper, type text}}),
+    #"Changed Type" = Table.TransformColumnTypes(#"Capitalized Each Word",{{"Demographics.HH.Head", type number}, {"Demographics.Language", type number}, {"Demographics.Profiles", type number}, {"Demographics.Documentation", type number}, {"Needs_and_Coping.BasicNeeds", type number}, {"Needs_and_Coping.Housing", type number}, {"Needs_and_Coping.Neg.mechanism", type number}, {"Needs_and_Coping.Dependency", type number}, {"NumIntegrantes", type number}, {"Demographics_Score", type number}, {"NeedsandCoping_Score", type number}, {"Vulnerability_Score", type number}, {"FinalScore", type number}, {"uncertainty_pct", type number}}, "en-US"),
+    #"Unspecified for Blanks" = Table.ReplaceValue(#"Changed Type", null, "Unspecified", Replacer.ReplaceValue, {"Household Head Gender", "Solo Caretaker"}),
+    #"No Office for Blanks" = Table.ReplaceValue(#"Unspecified for Blanks", null, "No Office", Replacer.ReplaceValue, {"OficinaACNUR"}),
+    #"Translated Eligible" = Table.ReplaceValue(#"No Office for Blanks", "Elegible", "Eligible", Replacer.ReplaceValue, {"Elegibilidad"}),
+    #"Typed Review Columns" = Table.TransformColumnTypes(#"Translated Eligible", {{"uncertainty_original", type number}}, "en-US"),
+    #"Added Conditional Column" = Table.AddColumn(#"Typed Review Columns", "Vulnerability_Sort", each if [Vulnerability] = "Low" then 1 else if [Vulnerability] = "Moderate" then 2 else if [Vulnerability] = "Elevated" then 3 else if [Vulnerability] = "Severe" then 4 else null),
+    // review-only columns coming from revisiones: recomputed below for ALL rows
+    #"Removed Review AI Columns" = Table.RemoveColumns(#"Added Conditional Column", {"AI Recommendation", "AI Sort"}, MissingField.Ignore),
+    #"Added AI Recommendation" = Table.AddColumn(#"Removed Review AI Columns", "AI Recommendation", each if [ai_recomandation] = null then null else Text.Proper([ai_recomandation]), type text),
+    #"Added AI Sort" = Table.AddColumn(#"Added AI Recommendation", "AI Sort", each if [ai_recomandation] = "low" then 1 else if [ai_recomandation] = "medium" then 2 else if [ai_recomandation] = "high" then 3 else null, Int64.Type),
+    #"Added Uncertainty" = Table.AddColumn(#"Added AI Sort", "Uncertainty", each if [uncertainty_pct] &lt;&gt; null then [uncertainty_pct] else [uncertainty_original], type number),
+    #"Added Status" = Table.AddColumn(#"Added Uncertainty", "Status", each if [revision_id] = null then "Pending" else "Reviewed", type text)
+in
+    #"Added Status"</pre>
+<div class="check"><span class="title">Verificación</span><ul><li><code>Uncertainty</code> no tiene vacíos y va de 10.82 a 40.40, si corriste <code>uncertain_Toolkit.py</code>.</li><li><code>Status</code>: Pending + Reviewed = 1,900.</li><li><code>AI Recommendation</code>: Low 676 · Medium 590 · High 634.</li></ul></div>
+<div class="nota"><span class="title">Si ves un número distinto en Medium / High:</span><code>pd.qcut</code> puede asignar distinto el caso que queda justo en el corte según la versión de pandas. Con pandas 3 sale Medium 591 · High 633. No es un error del modelo.</div></div></div>
+<div class="paso"><label><input type="checkbox" id="p2_4"><span>Ordenar AI Recommendation y ajustar una relación</span></label><div class="detalle"><div class="porque"><b>Por qué:</b> sin orden explícito, Power BI pone High · Low · Medium (orden alfabético). Además, la relación <code>revisiones[month] → Calendar</code> está en ambas direcciones: un filtro en la página Reviews puede filtrar <code>Calendar</code> y, a través de él, los visuales de <code>Cashy</code>.</div>
+<div class="donde"><b>Dónde:</b> Inicio → Cerrar y aplicar. Luego, en vista Datos, en <code>Cashy</code> y en <code>revisiones</code>: columna <b>AI Recommendation</b> → Herramientas de columnas → Ordenar por columna → <b>AI Sort</b>. Después, en vista Modelo: doble clic en la línea <code>revisiones → Calendar</code> → Dirección del filtro cruzado: <b>Única</b>.</div>
+<div class="check"><span class="title">Verificación</span>en cualquier eje, AI Recommendation aparece en el orden Low → Medium → High.</div></div></div></div></section>
+<section class="fase"><h2><span><span class="num">3</span>FASE 2 — Medidas del General (tabla Cashy)</span><span class="tiempo">~10 min</span></h2><div class="cuerpo"><p>Se reutilizan las que ya tienes: <b>Cases</b>, <b>Reviewed Cases</b>, <b>Pending Cases</b>, <b>% Reviewed</b>, <b>Avg Uncertainty Pending</b>, <b>Gender Count</b>, <b>Average Integrants per Group</b> y <b>Count Eligibility</b>.</p>
+<div class="paso"><label><input type="checkbox" id="p3_1"><span>Crear 5 medidas en Cashy</span></label><div class="detalle"><div class="porque"><b>Por qué:</b> completan lo que el General necesita mostrar sobre las salidas de Cashy (uncertainty y FinalScore promedio), la decisión registrada y la carga de los caseworkers. Se usa <code>DISTINCTCOUNTNOBLANK</code> porque los 21 casos sin oficina no tienen CaseworkerID y un <code>DISTINCTCOUNT</code> normal contaría el vacío como un caseworker más.</div>
+<div class="donde"><b>Dónde:</b> Panel Datos → clic derecho en <code>Cashy</code> → Nueva medida → pega → Enter. Una medida a la vez.</div>
+<pre><button class="copy" type="button">Copiar</button>Avg Uncertainty =
+AVERAGE(Cashy[Uncertainty])</pre>
+<pre><button class="copy" type="button">Copiar</button>Avg FinalScore =
+AVERAGE(Cashy[FinalScore])</pre>
+<pre><button class="copy" type="button">Copiar</button>Recorded Inclusion Rate =
+DIVIDE(CALCULATE([Cases], Cashy[EligibilityTarget] = "INCLUSION"), [Cases])</pre>
+<pre><button class="copy" type="button">Copiar</button>Caseworkers =
+DISTINCTCOUNTNOBLANK(Cashy[CaseworkerID])</pre>
+<pre><button class="copy" type="button">Copiar</button>Cases per Caseworker =
+DIVIDE(CALCULATE([Cases], NOT ISBLANK(Cashy[CaseworkerID])), [Caseworkers])</pre>
+<div class="check"><span class="title">Verificación</span><ul><li>Avg Uncertainty ≈ 22.25 · Recorded Inclusion Rate = 22.5% (427 / 1,900)</li><li>Caseworkers = 52 (8 por oficina; fusal 5 y futij 7, porque se asignan al azar por caso)</li><li>Cases per Caseworker = 1,879 / 52 ≈ 36.1</li></ul></div>
+<div class="nota"><b>Formato:</b> <b>Recorded Inclusion Rate</b> en Porcentaje. <b>Avg Uncertainty</b>, <b>Avg FinalScore</b> y <b>Cases per Caseworker</b> como número con 1 decimal.</div></div></div></div></section>
+<section class="fase"><h2><span><span class="num">4</span>FASE 3 — Medidas de Reviews (tabla revisiones)</span><span class="tiempo">~15 min</span></h2><div class="cuerpo"><p>Se reutilizan <b>Count Revisiones</b> y <b>Avg Uncertainty Reviewed</b>.</p>
+<div class="paso"><label><input type="checkbox" id="p4_1"><span>Crear 11 medidas en revisiones</span></label><div class="detalle"><div class="porque"><b>Por qué:</b> la tasa de desacuerdo es el indicador central. El reto pide reportarla con intervalo de confianza (Wilson), porque con pocas revisiones un 50% puede significar casi cualquier cosa. Comparar <b>Blind Inclusion Rate</b> con <b>Recorded Inclusion Rate (Reviewed)</b> muestra si, a ciegas, los caseworkers incluyen más o menos que la decisión registrada.</div>
+<div class="donde"><b>Dónde:</b> Panel Datos → clic derecho en <code>revisiones</code> → Nueva medida.</div>
+<pre><button class="copy" type="button">Copiar</button>Blind Include =
+CALCULATE([Count Revisiones], revisiones[EligibilityTarget2] = "INCLUSION")</pre>
+<pre><button class="copy" type="button">Copiar</button>Blind Exclude =
+CALCULATE([Count Revisiones], revisiones[EligibilityTarget2] = "EXCLUSION")</pre>
+<pre><button class="copy" type="button">Copiar</button>Agreements =
+CALCULATE([Count Revisiones], revisiones[Agreement] = "Agrees")</pre>
+<pre><button class="copy" type="button">Copiar</button>Disagreements =
+CALCULATE([Count Revisiones], revisiones[Agreement] = "Disagrees")</pre>
+<pre><button class="copy" type="button">Copiar</button>Disagreement Rate =
+DIVIDE([Disagreements], [Count Revisiones])</pre>
+<pre><button class="copy" type="button">Copiar</button>Disagreement Rate CI Low =
+VAR k = [Disagreements]
+VAR n = [Count Revisiones]
+VAR z = 1.96
+VAR p = DIVIDE(k, n)
+VAR c = (p + z * z / (2 * n)) / (1 + z * z / n)
+VAR h = z * SQRT(p * (1 - p) / n + z * z / (4 * n * n)) / (1 + z * z / n)
+RETURN
+    IF(n &gt; 0, MAX(0, c - h))</pre>
+<pre><button class="copy" type="button">Copiar</button>Disagreement Rate CI High =
+VAR k = [Disagreements]
+VAR n = [Count Revisiones]
+VAR z = 1.96
+VAR p = DIVIDE(k, n)
+VAR c = (p + z * z / (2 * n)) / (1 + z * z / n)
+VAR h = z * SQRT(p * (1 - p) / n + z * z / (4 * n * n)) / (1 + z * z / n)
+RETURN
+    IF(n &gt; 0, MIN(1, c + h))</pre>
+<pre><button class="copy" type="button">Copiar</button>Blind Inclusion Rate =
+DIVIDE([Blind Include], [Count Revisiones])</pre>
+<pre><button class="copy" type="button">Copiar</button>Recorded Inclusion Rate (Reviewed) =
+DIVIDE(CALCULATE([Count Revisiones], revisiones[EligibilityTarget] = "INCLUSION"), [Count Revisiones])</pre>
+<pre><button class="copy" type="button">Copiar</button>Avg Uncertainty Disagreements =
+CALCULATE([Avg Uncertainty Reviewed], revisiones[Agreement] = "Disagrees")</pre>
+<pre><button class="copy" type="button">Copiar</button>Reviews with Note =
+CALCULATE([Count Revisiones], NOT ISBLANK(revisiones[nota]))</pre>
+<div class="check"><span class="title">Verificación</span><ul><li>Blind Include + Blind Exclude = Count Revisiones</li><li>Agreements + Disagreements = Count Revisiones</li><li>Prueba de Wilson: con 1 desacuerdo de 2 revisiones, el IC da 9.5% – 90.5%</li></ul></div>
+<div class="nota"><b>Formato:</b> todas las <i>Rate</i> y los dos <i>CI</i> en Porcentaje con 1 decimal.</div></div></div></div></section>
+<section class="fase"><h2><span><span class="num">5</span>FASE 4 — Página "General"</span><span class="tiempo">~40 min</span></h2><div class="cuerpo"><p>Tu página General ya tiene casi todo: las tarjetas, los gráficos demográficos, Cases by Office y los segmentadores. Solo se agregan cuatro visuales sobre las columnas nuevas.</p>
+<div class="paso"><label><input type="checkbox" id="p5_1"><span>Completar la fila de tarjetas</span></label><div class="detalle"><div class="porque"><b>Por qué:</b> falta el total de casos y el contexto de Cashy y de la decisión registrada.</div>
+<table><thead><tr><th>Visual</th><th>Campo</th><th>Título (EN)</th></tr></thead><tbody><tr><td>Tarjeta (nueva)</td><td>Cases</td><td>Cases</td></tr><tr><td>Tarjeta (nueva)</td><td>Avg Uncertainty</td><td>Avg Uncertainty (%)</td></tr><tr><td>Tarjeta (nueva)</td><td>Recorded Inclusion Rate</td><td>Recorded Inclusion Rate</td></tr><tr><td>Tarjeta (nueva)</td><td>Caseworkers</td><td>Caseworkers</td></tr></tbody></table>
+<div class="check"><span class="title">Verificación</span>Cases = Pending Cases + Reviewed Cases = 1,900.</div></div></div>
+<div class="paso"><label><input type="checkbox" id="p5_2"><span>AI Recommendation vs decisión registrada</span></label><div class="detalle"><div class="porque"><b>Por qué:</b> muestra qué tanto se alinea el nivel del FinalScore de Cashy con la decisión final. En esta muestra la relación es débil: cada nivel tiene entre 20% y 24% de inclusiones (Low 20.4%, Medium 23.4%, High 23.8%). El reto advierte que en el S8 la elegibilidad casi no depende del puntaje.</div>
+<table><thead><tr><th>Visual</th><th>Eje / Leyenda</th><th>Valores</th><th>Título (EN)</th></tr></thead><tbody><tr><td>Columnas 100% apiladas</td><td>Eje: AI Recommendation · Leyenda: EligibilityTarget</td><td>Cases</td><td>AI Recommendation vs Recorded Decision</td></tr><tr><td>Matriz</td><td>Filas: AI Recommendation · Columnas: EligibilityTarget</td><td>Cases</td><td>(debajo, con los números)</td></tr></tbody></table>
+<div class="check"><span class="title">Verificación</span>Low: 538 EXCLUSION / 138 INCLUSION · Medium: 452 / 138 · High: 483 / 151.</div></div></div>
+<div class="paso"><label><input type="checkbox" id="p5_3"><span>FinalScore contra uncertainty</span></label><div class="detalle"><div class="porque"><b>Por qué:</b> muestra si los casos con más incertidumbre se concentran en algún rango del puntaje de Cashy, que es donde la revisión humana aporta más.</div>
+<table><thead><tr><th>Visual</th><th>Campos</th><th>Título (EN)</th></tr></thead><tbody><tr><td>Gráfico de dispersión</td><td>Valores: caso_id · Eje X: FinalScore (No resumir) · Eje Y: Uncertainty (No resumir) · Leyenda: Status</td><td>FinalScore vs Uncertainty</td></tr></tbody></table>
+<div class="donde"><b>Dónde:</b> después de arrastrar FinalScore y Uncertainty, cambia el resumen de los dos campos a <b>No resumir</b> (flecha del campo). Si no, sale un solo punto.</div>
+<div class="check"><span class="title">Verificación</span>1,900 puntos. El eje X va de 0 a ~81 y el eje Y de ~10.8 a ~40.4.</div></div></div>
+<div class="paso"><label><input type="checkbox" id="p5_4"><span>Carga por caseworker y rangos de uncertainty</span></label><div class="detalle"><div class="porque"><b>Por qué:</b> muestra cómo se reparte el trabajo de revisión dentro de cada oficina y cuántos casos hay en cada rango de incertidumbre.</div>
+<div class="donde"><b>Dónde:</b> para los rangos: Panel Datos → <code>Cashy</code> → clic derecho en <b>Uncertainty</b> → Nuevo grupo → Discretizaciones → Tamaño: 5 → nombre <b>Uncertainty Bin</b>.</div>
+<table><thead><tr><th>Visual</th><th>Eje / Leyenda</th><th>Valores</th><th>Título (EN)</th></tr></thead><tbody><tr><td>Barras apiladas</td><td>Eje: CaseworkerID · Leyenda: Status (filtro del visual: CaseworkerID no está en blanco)</td><td>Cases</td><td>Workload by Caseworker</td></tr><tr><td>Columnas apiladas</td><td>Eje: Uncertainty Bin · Leyenda: Status</td><td>Cases</td><td>Cases by Uncertainty Range</td></tr></tbody></table>
+<div class="check"><span class="title">Verificación</span>con el segmentador de oficina en Sotap, Workload by Caseworker muestra 8 barras que suman 1,278. El histograma suma 1,900 sin segmentador.</div>
+<div class="alerta"><b>Ojo:</b> el gráfico por caseworker es para ver la carga, no para comparar el desempeño de personas. Los IDs son seudónimos y deben seguir siéndolo.</div></div></div></div></section>
+<section class="fase"><h2><span><span class="num">6</span>FASE 5 — Página "Reviews" (antes "Overwrites")</span><span class="tiempo">~40 min</span></h2><div class="cuerpo"><p>Renombra la página <b>Overwrites</b> a <b>Reviews</b> (doble clic en la pestaña) y borra la tarjeta que da error. Todos los campos de esta página son de <code>revisiones</code>.</p>
+<div class="paso"><label><input type="checkbox" id="p6_1"><span>Cambiar los segmentadores de la página</span></label><div class="detalle"><div class="porque"><b>Por qué:</b> el segmentador actual de oficina usa <code>Cashy[OficinaACNUR]</code>, y como no hay relación activa entre <code>Cashy</code> y <code>revisiones</code>, no filtra nada en esta página. Los de año y mes de <code>Calendar</code> sí filtran, pero por mes de entrevista (<code>revisiones[month]</code>), no por fecha de revisión.</div>
+<table><thead><tr><th>Segmentador</th><th>Campo</th></tr></thead><tbody><tr><td>Office</td><td>revisiones[sede_revisor] (reemplaza el de Cashy[OficinaACNUR])</td></tr><tr><td>Caseworker</td><td>revisiones[revisor]</td></tr><tr><td>AI Recommendation</td><td>revisiones[AI Recommendation]</td></tr><tr><td>Review date</td><td>revisiones[Review Date] · estilo "Entre"</td></tr></tbody></table>
+<div class="check"><span class="title">Verificación</span>al elegir una oficina, Count Revisiones baja a las revisiones de esa oficina.</div></div></div>
+<div class="paso"><label><input type="checkbox" id="p6_2"><span>Fila 1 · Tarjetas</span></label><div class="detalle"><div class="porque"><b>Por qué:</b> de un vistazo: cuánto se revisó, qué decidieron a ciegas y cuánto difiere de lo registrado, con su intervalo.</div>
+<table><thead><tr><th>Visual</th><th>Campo</th><th>Título (EN)</th></tr></thead><tbody><tr><td>Tarjeta</td><td>Count Revisiones</td><td>Reviews</td></tr><tr><td>Tarjeta</td><td>Blind Include</td><td>Blind Include</td></tr><tr><td>Tarjeta</td><td>Blind Exclude</td><td>Blind Exclude</td></tr><tr><td>Tarjeta</td><td>Disagreement Rate</td><td>Disagreement with Recorded Decision</td></tr><tr><td>Tarjeta (o tabla de 1 fila)</td><td>Disagreement Rate CI Low, Disagreement Rate CI High</td><td>95% CI (Wilson)</td></tr><tr><td>Tarjeta</td><td>Blind Inclusion Rate</td><td>Blind Inclusion Rate</td></tr><tr><td>Tarjeta</td><td>Recorded Inclusion Rate (Reviewed)</td><td>Recorded Inclusion Rate</td></tr></tbody></table>
+<div class="check"><span class="title">Verificación</span>Blind Include + Blind Exclude = Reviews, y el IC siempre contiene a la Disagreement Rate.</div></div></div>
+<div class="paso"><label><input type="checkbox" id="p6_3"><span>Fila 2 · Dónde están los desacuerdos</span></label><div class="detalle"><div class="porque"><b>Por qué:</b> permite ver si los desacuerdos se concentran en una dirección, en un nivel de AI Recommendation, en un rango de uncertainty o en una oficina.</div>
+<div class="donde"><b>Dónde:</b> para los rangos: <code>revisiones</code> → clic derecho en <b>uncertainty_original</b> → Nuevo grupo → Discretizaciones → Tamaño: 5 → <b>Uncertainty Bin</b>.</div>
+<table><thead><tr><th>Visual</th><th>Eje / Leyenda</th><th>Valores</th><th>Título (EN)</th></tr></thead><tbody><tr><td>Barras</td><td>Disagreement Direction (filtro del visual: quitar "No disagreement")</td><td>Count Revisiones</td><td>Disagreement Direction</td></tr><tr><td>Columnas agrupadas</td><td>AI Recommendation</td><td>Disagreement Rate</td><td>Disagreement by AI Recommendation</td></tr><tr><td>Columnas apiladas</td><td>Eje: Uncertainty Bin · Leyenda: Agreement</td><td>Count Revisiones</td><td>Reviews by Uncertainty Range</td></tr><tr><td>Barras</td><td>sede_revisor</td><td>Disagreement Rate</td><td>Disagreement by Office</td></tr><tr><td>Barras</td><td>revisor</td><td>Disagreement Rate</td><td>Disagreement by Caseworker</td></tr></tbody></table>
+<div class="check"><span class="title">Verificación</span>las barras de Disagreement Direction suman lo mismo que Disagreements, y el histograma suma Reviews.</div>
+<div class="alerta"><b>Con pocas revisiones:</b> una oficina o un caseworker con 2 revisiones puede mostrar 0% o 100%. Pon <b>Count Revisiones</b> en la información sobre herramientas de cada barra, para que el n siempre se vea.</div></div></div>
+<div class="paso"><label><input type="checkbox" id="p6_4"><span>Fila 3 · En el tiempo y notas</span></label><div class="detalle"><div class="porque"><b>Por qué:</b> la línea muestra el ritmo de revisión y si el desacuerdo cambia con el tiempo. La tabla junta el porqué que escribió el caseworker en cada desacuerdo.</div>
+<table><thead><tr><th>Visual</th><th>Campos</th><th>Título (EN)</th></tr></thead><tbody><tr><td>Líneas</td><td>Eje: Review Date · Valores: Count Revisiones, Disagreements</td><td>Reviews over Time</td></tr><tr><td>Tabla</td><td>caso_id, Review Date, revisor, sede_revisor, FinalScore, AI Recommendation, uncertainty_original, EligibilityTarget, EligibilityTarget2, nota · filtro del visual: Agreement = Disagrees</td><td>Disagreements and Notes</td></tr></tbody></table>
+<div class="check"><span class="title">Verificación</span>la tabla tiene tantas filas como Disagreements.</div></div></div></div></section>
+<section class="fase"><h2><span><span class="num">7</span>FASE 6 — Usar y revisar</span><span class="tiempo">~5 min</span></h2><div class="cuerpo"><div class="paso"><label><input type="checkbox" id="p7_1"><span>Actualizar después de revisar en la app</span></label><div class="detalle"><div class="porque"><b>Por qué:</b> Power BI lee <code>cashy.db</code> solo cuando actualizas.</div>
+<div class="donde"><b>Dónde:</b> Inicio → Actualizar. La app puede seguir abierta.</div>
+<div class="check"><span class="title">Verificación</span>guarda una revisión de prueba en la app y actualiza. Reviews sube en 1, Pending baja en 1 y Cases sigue en 1,900.</div></div></div>
+<div class="paso"><label><input type="checkbox" id="p7_2"><span>Si algo no cuadra</span></label><div class="detalle"><div class="porque"><b>Por qué:</b> casi todos los descuadres vienen de uno de estos casos.</div>
+<table><thead><tr><th>Si ves…</th><th>Causa probable</th></tr></thead><tbody><tr><td>Error en una tarjeta de Reviews</td><td>Quedó alguna medida que usa revisiones[accion] (Fase 1, paso 1)</td></tr><tr><td>"Agreement" no existe</td><td>No se aplicó el código nuevo de revisiones o no se hizo Cerrar y aplicar</td></tr><tr><td>Error "AI Recommendation ya existe" en Cashy</td><td>Falta el paso "Removed Review AI Columns" del código de Cashy</td></tr><tr><td>Avg Uncertainty en blanco para revisados</td><td>Falta la columna Uncertainty en Cashy (Fase 1, paso 3)</td></tr><tr><td>Caseworkers = 53</td><td>Se usó DISTINCTCOUNT en lugar de DISTINCTCOUNTNOBLANK</td></tr><tr><td>El segmentador de oficina no filtra en Reviews</td><td>Sigue siendo el de Cashy[OficinaACNUR]; usa revisiones[sede_revisor]</td></tr></tbody></table>
+<div class="check"><span class="title">Verificación</span>todas las cifras de verificación de las Fases 1 a 5 coinciden.</div></div></div></div></section>
+</div>
+<footer>Code Goblins · Cashy Oversight Challenge (UNHCR) · Datos sintéticos (S8) — El avance de esta guía se guarda en tu navegador: puedes cerrarla y seguir después.</footer>
+<script>window.__GQ_STORAGE_KEY__="gq_cashy_dashboards_ciega_v1";</script><script>
+/* GQ Strategy — comportamiento canónico de las guías HTML.
+   Vanilla JS, sin dependencias. Tolera la ausencia de barra de progreso
+   (guías tipo usuario/instructivo, que no llevan checkboxes). */
+(function () {
+  "use strict";
+
+  var KEY = window.__GQ_STORAGE_KEY__ || "gq_guia_v1";
+  var boxes = [].slice.call(document.querySelectorAll(".paso input[type=checkbox]"));
+  var fill = document.getElementById("fill");
+  var hechos = document.getElementById("hechos");
+  var total = document.getElementById("totalpasos");
+
+  /* ---------- Progreso persistente ---------- */
+  function save() {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(boxes.map(function (b) { return b.checked; })));
+    } catch (e) { /* modo privado o storage bloqueado: la guía sigue usable */ }
+  }
+
+  function paint() {
+    var n = 0;
+    boxes.forEach(function (b) {
+      var paso = b.closest(".paso");
+      if (paso) paso.classList.toggle("done", b.checked);
+      if (b.checked) n++;
+    });
+    if (hechos) hechos.textContent = n;
+    if (fill) fill.style.width = (boxes.length ? (100 * n / boxes.length) : 0) + "%";
+  }
+
+  function load() {
+    try {
+      var s = JSON.parse(localStorage.getItem(KEY) || "[]");
+      boxes.forEach(function (b, i) { b.checked = !!s[i]; });
+    } catch (e) { /* ignorar estado corrupto */ }
+    paint();
+  }
+
+  if (total) total.textContent = boxes.length;
+  boxes.forEach(function (b) {
+    b.addEventListener("change", function () { save(); paint(); });
+  });
+
+  var btnReset = document.getElementById("reset");
+  if (btnReset) {
+    btnReset.addEventListener("click", function () {
+      boxes.forEach(function (b) { b.checked = false; });
+      save(); paint();
+    });
+  }
+
+  /* ---------- Colapsar / expandir fases ---------- */
+  document.querySelectorAll(".fase > h2").forEach(function (h) {
+    h.addEventListener("click", function () {
+      h.parentNode.classList.toggle("cerrada");
+      var c = h.nextElementSibling;
+      if (c) c.style.display = h.parentNode.classList.contains("cerrada") ? "none" : "";
+    });
+  });
+
+  /* ---------- Botón Copiar ----------
+     Clona el <pre>, quita el botón y copia sólo el código. Nunca usar
+     innerText del padre con un replace del literal "Copiar": si el código
+     contiene esa palabra, la mutila. */
+  document.querySelectorAll("pre .copy").forEach(function (btn) {
+    btn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      var clon = btn.parentNode.cloneNode(true);
+      var b = clon.querySelector(".copy");
+      if (b) b.parentNode.removeChild(b);
+      var txt = clon.textContent.replace(/^\s+|\s+$/g, "");
+
+      function ok() {
+        var prev = btn.textContent;
+        btn.textContent = "Copiado ✓";
+        setTimeout(function () { btn.textContent = prev; }, 1400);
+      }
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(txt).then(ok, fallback);
+      } else {
+        fallback();
+      }
+
+      function fallback() {
+        var ta = document.createElement("textarea");
+        ta.value = txt;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand("copy"); ok(); } catch (err) { /* nada */ }
+        document.body.removeChild(ta);
+      }
+    });
+  });
+
+  load();
+})();
+
+</script></body></html>
